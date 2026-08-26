@@ -1,0 +1,65 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import PdfMetadataTool from '../components/PdfMetadataTool.astro';
+import PdfSeoContent from '../components/PdfSeoContent.astro';
+import Footer from '../components/Footer.astro';
+
+const pdfTitle = "PDF Metadata Remover – Free Online PDF EXIF & Document Stripper";
+const pdfDescription = "Free online pdf metadata remover. Remove author names, titles, creation dates, keywords, and XMP metadata from PDF files directly inside your browser. 100% private.";
+const pdfKeywords = "pdf metadata remover, pdf exif remover, Metadata Remover, remove metadata from pdf, online pdf metadata remover, free pdf metadata remover, pdf exif remover online, real metadata remover";
+---
+
+<Layout title={pdfTitle} description={pdfDescription} keywords={pdfKeywords}>
+  <Header />
+  <main class="flex-grow">
+    <!-- Hero Section for PDF Metadata Remover -->
+    <section class="relative pt-12 pb-8 md:pt-16 md:pb-12 px-4 sm:px-6 overflow-hidden mesh-gradient-bg">
+      <div class="max-w-4xl mx-auto text-center space-y-4">
+        <!-- Announcement Badge -->
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-xs font-mono text-[#4d4d4d] dark:text-[#a1a1a1] shadow-2xs">
+          <span class="px-1.5 py-0.5 rounded-md bg-[#171717] dark:bg-white text-white dark:text-[#171717] text-[10px] font-sans font-medium">100% PRIVATE</span>
+          <span>🔒 Your PDF stays on your device.</span>
+        </div>
+
+        <!-- Main Hero H1 -->
+        <h1 class="text-3xl sm:text-5xl md:text-6xl font-semibold text-[#171717] dark:text-white tracking-tight leading-[1.1]">
+          PDF Metadata Remover
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-base sm:text-lg text-[#4d4d4d] dark:text-[#a1a1a1] max-w-2xl mx-auto font-normal leading-relaxed">
+          Remove hidden metadata from PDF files directly in your browser.
+        </p>
+
+        <!-- Trust Indicators Bar -->
+        <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 pt-2 text-xs font-mono text-[#888888] dark:text-[#a1a1a1]">
+          <span class="flex items-center gap-1.5 bg-white/80 dark:bg-[#171717]/80 px-2.5 py-1 rounded-md border border-[#ebebeb] dark:border-[#262626]">
+            <svg class="w-3.5 h-3.5 text-[#10b981]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            100% Free
+          </span>
+          <span class="flex items-center gap-1.5 bg-white/80 dark:bg-[#171717]/80 px-2.5 py-1 rounded-md border border-[#ebebeb] dark:border-[#262626]">
+            <svg class="w-3.5 h-3.5 text-[#10b981]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            No Signup
+          </span>
+          <span class="flex items-center gap-1.5 bg-white/80 dark:bg-[#171717]/80 px-2.5 py-1 rounded-md border border-[#ebebeb] dark:border-[#262626]">
+            <svg class="w-3.5 h-3.5 text-[#10b981]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Zero Server Uploads
+          </span>
+          <span class="flex items-center gap-1.5 bg-white/80 dark:bg-[#171717]/80 px-2.5 py-1 rounded-md border border-[#ebebeb] dark:border-[#262626]">
+            <svg class="w-3.5 h-3.5 text-[#10b981]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            In-Browser Processing
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PDF Tool Section -->
+    <PdfMetadataTool />
+
+    <!-- PDF SEO Content Section -->
+    <PdfSeoContent />
+  </main>
+  
+  <Footer />
+</Layout>

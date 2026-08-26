@@ -1,0 +1,120 @@
+---
+// FAQ Section Component with JSON-LD Schema for SEO
+const faqs = [
+  {
+    question: "What is a metadata remover?",
+    answer: "A metadata remover (or EXIF stripper) is a software tool or online utility designed to scan digital files—such as photos, videos, and documents—and purge hidden embedded metadata headers (including EXIF tags, GPS location data, camera settings, author names, and timestamps) without altering or degrading the visible file content or visual quality."
+  },
+  {
+    question: "What does a metadata remover do?",
+    answer: "A metadata remover identifies and strips non-essential background data streams embedded inside your files. It wipes GPS location coordinates, camera hardware serial numbers, shutter speed specs, editing history logs, creator names, and creation timestamps before you publish or share files on the internet."
+  },
+  {
+    question: "What is metadata used for?",
+    answer: "Metadata is used to organize, index, search, and describe digital files. Operating systems use it to sort files by creation date, search engines use it to index web pages, applications use it to display file information, and photographers use it to record technical exposure settings and copyright data."
+  },
+  {
+    question: "Can I delete metadata files?",
+    answer: "Yes, you can safely delete metadata embedded within files or delete separate sidecar metadata files (such as .xmp files). Deleting metadata removes only the hidden background attributes—it does not alter, delete, or damage your actual photos, videos, or document contents."
+  },
+  {
+    question: "How to know if metadata has been removed?",
+    answer: "You can verify if metadata has been removed by checking the file properties in your operating system (right-click -> Properties -> Details on Windows, or Get Info on macOS), inspecting the file with an online metadata checker like metadatastripper.com, or running command-line tools like ExifTool. If cleaned, sensitive fields such as GPS location, camera model, and author will be empty or missing."
+  },
+  {
+    question: "Why remove metadata from photos?",
+    answer: "Removing metadata from photos protects your personal privacy and safety. Photos captured on smartphones and cameras embed exact GPS coordinates, home addresses, capture date/time, and device serial numbers. Stripping photo metadata prevents online tracking, stalking, dox threats, and privacy leaks when sharing pictures online."
+  },
+  {
+    question: "What are examples of metadata?",
+    answer: "Common examples of metadata include: EXIF/XMP tags in photos (GPS coordinates, camera model, ISO, aperture, shutter speed), document properties in PDFs/Word (author name, creation date, editing software), media properties in MP4/MP3 (track title, codec, duration, geo-tags), and web headers (title tags, meta descriptions, file size)."
+  },
+  {
+    question: "Why do I need metadata?",
+    answer: "You need metadata for file organization, searchability, and technical workflow management. It enables your smartphone gallery to sort photos by location or date, allows search engines to find relevant documents, helps photographers track camera settings, and assists software in rendering files accurately."
+  },
+  {
+    question: "What is metadata in photos?",
+    answer: "Metadata in photos (often referred to as EXIF, IPTC, or XMP data) is invisible header information automatically recorded by digital cameras and smartphones when a picture is taken. It stores exposure specs (focal length, ISO, shutter speed), camera hardware details, timestamp, color profiles, and precise GPS location coordinates."
+  },
+  {
+    question: "What can metadata tell you?",
+    answer: "Metadata can reveal extensive details about a file and its creator, including the exact location (GPS coordinates) where a photo was taken, the exact time and date, the device brand and model, device serial numbers, the author or organization name, software used to edit the file, and file modification history."
+  },
+  {
+    question: "What is the main purpose of metadata?",
+    answer: "The main purpose of metadata is to provide structured context and background information about data ('data about data'). It allows computers, search engines, databases, and users to quickly identify, categorize, manage, sort, and retrieve digital files efficiently."
+  },
+  {
+    question: "How to see hidden metadata?",
+    answer: "You can view hidden metadata by dragging and dropping your file into metadatastripper.com, checking file properties in your operating system (File Details on Windows or Command+I on Mac), opening the image in photo editors like Photoshop or Lightroom, or using metadata viewers like ExifTool."
+  },
+  {
+    question: "Can metadata on photos be wrong?",
+    answer: "Yes, metadata on photos can be incorrect. If a camera or phone clock was set to the wrong time or timezone, timestamps will be wrong. If GPS signal was weak or turned off, location data might be inaccurate or missing. Additionally, metadata can be altered, corrupted during conversion, or stripped by editing software."
+  },
+  {
+    question: "Can metadata be faked?",
+    answer: "Yes, metadata can easily be faked or spoofed. Because metadata headers consist of editable text or binary tags, anyone using specialized tools (like ExifTool, Python scripts, or hex editors) can overwrite GPS coordinates, change capture dates, modify camera models, or alter author names."
+  },
+  {
+    question: "How do I check my metadata?",
+    answer: "You can check your file's metadata instantly by uploading your file to our free online scanner at metadatastripper.com. The tool will parse and display every embedded EXIF tag, GPS coordinate, camera property, and document header found in your file."
+  },
+  {
+    question: "Is metadata personal data?",
+    answer: "Yes, under major privacy laws such as the European Union's GDPR and California's CCPA, metadata can be legally classified as personal data if it contains information that can directly or indirectly identify an individual—such as precise GPS location tracking, full names, usernames, IP addresses, or device serial numbers."
+  },
+  {
+    question: "Does screenshotting a photo remove the metadata?",
+    answer: "Yes! Taking a screenshot creates a new image file containing only the pixels displayed on your screen. The original photo's EXIF metadata, GPS location tags, camera settings, and original creation date are not copied over. However, the screenshot will have its own basic new metadata (such as the screenshot date and screen resolution)."
+  }
+];
+
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.answer
+    }
+  }))
+};
+---
+
+<div id="faq" class="space-y-6">
+  <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-xs font-mono text-[#888888] dark:text-[#a1a1a1]">
+    <span>FREQUENTLY ASKED QUESTIONS</span>
+  </div>
+
+  <div class="space-y-2">
+    <h2 class="text-2xl sm:text-3xl font-semibold text-[#171717] dark:text-white tracking-tight">
+      Frequently Asked Questions About Metadata & Metadata Removal
+    </h2>
+    <p class="text-sm text-[#888888] dark:text-[#a1a1a1] leading-relaxed">
+      Everything you need to know about photo EXIF data, file privacy, location tags, and metadata removal.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 gap-3 font-sans">
+    {faqs.map((faq, index) => (
+      <details class="group p-5 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111] transition-all card-hairline [&[open]]:bg-[#fafafa] dark:[&[open]]:bg-[#141414]">
+        <summary class="flex items-center justify-between font-semibold text-base text-[#171717] dark:text-white cursor-pointer select-none list-none gap-4">
+          <span>{index + 1}. {faq.question}</span>
+          <span class="text-[#888888] group-open:rotate-180 transition-transform duration-200 text-sm font-mono flex-shrink-0">
+            ↓
+          </span>
+        </summary>
+        <p class="mt-3 text-sm text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed pt-2 border-t border-[#ebebeb]/60 dark:border-[#262626]">
+          {faq.answer}
+        </p>
+      </details>
+    ))}
+  </div>
+</div>
+
+<!-- JSON-LD FAQPage Schema for Rich Search Snippets -->
+<script type="application/ld+json" set:html={JSON.stringify(jsonLdData)} />

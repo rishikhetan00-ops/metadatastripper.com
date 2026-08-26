@@ -1,23 +1,103 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import '../styles/global.css';
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  ogImage?: string;
+}
+
+const {
+  title = "Metadata Remover – Best Free Online EXIF, Image, PDF & Video Metadata Removal (2026)",
+  description = "Free online metadata remover. Remove EXIF data, GPS location coordinates, camera specs, author details & timestamps from photos, PDFs, and MP4/MOV videos. 100% private in-browser tool.",
+  keywords = "Metadata Remover, metadata remover video, image metadata remover, pdf metadata remover, photo metadata remover, ai metadata remover, free metadata remover, exif metadata remover, exif remover, online exif remover, pdf exif remover, free online exif remover, image exif remover, exif remover tool, exif remover app, mp4 exif remover, photo metadata exif remover, best free online exif remover 2026, remove metadata, metadata removal, remove metadata from images, online metadata remover, metadata remover free, real metadata remover",
+  ogImage = "https://metadatastripper.com/og-card.png"
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, "https://metadatastripper.com");
+---
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- Script to prevent dark mode flicker (FOUC) -->
+    <script is:inline>
+      (function() {
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content="Metadata Remover" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph / Facebook Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="Metadata Remover" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Google Fonts: Inter & Geist Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Schema.org WebSite JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Metadata Remover",
+      "url": "https://metadatastripper.com/",
+      "description": description,
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://metadatastripper.com/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    })} />
+
+    <!-- Schema.org SoftwareApplication JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Metadata Remover App",
+      "url": "https://metadatastripper.com/",
+      "description": "Best free online EXIF metadata remover. Strip GPS location coordinates, camera specs, timestamps, and author tags from images, PDFs, and MP4 videos directly inside your browser without uploading files.",
+      "applicationCategory": "SecurityApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    })} />
+  </head>
+  <body class="min-h-screen flex flex-col bg-[#fafafa] dark:bg-[#0a0a0a] text-[#171717] dark:text-[#ffffff] transition-colors duration-200">
+    <slot />
+  </body>
+</html>

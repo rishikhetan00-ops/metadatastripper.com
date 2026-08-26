@@ -1,11 +1,22 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import MetadataTool from '../components/MetadataTool.astro';
+import SeoContent from '../components/SeoContent.astro';
+import Footer from '../components/Footer.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const homeTitle = "Metadata Remover – Free Online EXIF, Image, PDF & Video Metadata Removal (2026)";
+const homeDescription = "Best free online metadata remover. Remove EXIF data, GPS location, camera details, and timestamps from photos, PDFs, and MP4 videos directly in your browser. 100% private.";
+const homeKeywords = "Metadata Remover, metadata remover video, image metadata remover, pdf metadata remover, photo metadata remover, ai metadata remover, free metadata remover, exif metadata remover, exif remover, online exif remover, pdf exif remover, free online exif remover, image exif remover, exif remover tool, exif remover app, mp4 exif remover, photo metadata exif remover, best free online exif remover 2026, remove metadata, metadata removal, remove metadata from images, online metadata remover, metadata remover free, real metadata remover";
 ---
 
-<Layout>
-	<Welcome />
+<Layout title={homeTitle} description={homeDescription} keywords={homeKeywords}>
+  <Header />
+  <main class="flex-grow">
+    <Hero />
+    <MetadataTool />
+    <SeoContent />
+  </main>
+  <Footer />
 </Layout>

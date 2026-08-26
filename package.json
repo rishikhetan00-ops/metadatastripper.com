@@ -12,7 +12,14 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.2.6"
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.2.6",
+    "exifreader": "^4.44.0",
+    "pdf-lib": "^1.17.1",
+    "piexifjs": "^1.0.6",
+    "tailwindcss": "^4.3.3"
   },
   "allowScripts": {
     "esbuild": true

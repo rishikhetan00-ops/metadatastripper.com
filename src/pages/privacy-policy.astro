@@ -1,0 +1,121 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const pageTitle = "Privacy Policy – Metadata Remover (100% Client-Side Privacy)";
+const pageDescription = "Read the Privacy Policy for metadatastripper.com. Our 100% client-side architecture guarantees your photos, PDFs, and videos are processed in browser RAM and never uploaded to any server.";
+const pageKeywords = "Privacy Policy, metadata remover privacy, client-side metadata stripper, EXIF privacy, GDPR compliant metadata remover";
+---
+
+<Layout title={pageTitle} description={pageDescription} keywords={pageKeywords}>
+  <Header />
+  <main class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-12">
+    
+    <!-- Header Hero -->
+    <div class="space-y-4 border-b border-[#ebebeb] dark:border-[#262626] pb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#10b981]/10 border border-[#10b981]/20 text-xs font-mono text-[#10b981]">
+        <span class="w-2 h-2 rounded-full bg-[#10b981]"></span>
+        <span>100% CLIENT-SIDE ARCHITECTURE GUARANTEE</span>
+      </div>
+      
+      <h1 class="text-3xl sm:text-5xl font-semibold text-[#171717] dark:text-white tracking-tight">
+        Privacy Policy
+      </h1>
+      
+      <p class="text-sm sm:text-base text-[#888888] dark:text-[#a1a1a1] font-mono">
+        Last Updated: August 2026 • Effective Immediately
+      </p>
+    </div>
+
+    <!-- Core Privacy Banner -->
+    <div class="p-6 rounded-2xl bg-[#171717] dark:bg-[#111111] dark:border dark:border-[#262626] text-white space-y-3 shadow-sm">
+      <div class="text-xs font-mono text-[#10b981] font-bold uppercase tracking-wider">🔒 Core Privacy Principle</div>
+      <p class="text-sm sm:text-base text-white/90 leading-relaxed font-sans">
+        At <strong>metadatastripper.com</strong>, we believe privacy is a fundamental human right. Unlike traditional web converters that force you to upload sensitive files to cloud servers, our metadata remover runs <strong>100% locally inside your web browser</strong> using WebAssembly and client-side JavaScript. Your files never touch our servers or any third-party cloud infrastructure.
+      </p>
+    </div>
+
+    <!-- Policy Sections -->
+    <div class="space-y-10 font-sans text-[#171717] dark:text-white">
+      
+      <!-- 1. Files & Media Processing -->
+      <section class="space-y-3">
+        <h2 class="text-xl sm:text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
+          1. File Uploads & Local Processing
+        </h2>
+        <p class="text-sm sm:text-base text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+          When you drag and drop an image (JPG, PNG, WebP), PDF document, or video file (MP4, MOV) into our application:
+        </p>
+        <ul class="text-sm text-[#4d4d4d] dark:text-[#a1a1a1] space-y-2 list-disc list-inside pl-2">
+          <li><strong>Zero Uploads:</strong> Your files are read into local browser RAM memory using FileReader APIs.</li>
+          <li><strong>No Server Logs:</strong> We do not operate remote worker servers or temp storage buckets to process your data.</li>
+          <li><strong>Instant Destruction:</strong> Once you close or refresh your browser tab, all temporary memory allocations are completely purged by your device's garbage collector.</li>
+        </ul>
+      </section>
+
+      <!-- 2. Data We Do Not Collect -->
+      <section class="space-y-3">
+        <h2 class="text-xl sm:text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
+          2. Information We Do NOT Collect
+        </h2>
+        <p class="text-sm sm:text-base text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+          Because of our strict zero-trust design, we NEVER collect, store, or transmit:
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <div class="p-4 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111] space-y-1">
+            <span class="text-xs font-mono text-[#ee0000] font-bold block">❌ Personal Identifiable Info</span>
+            <p class="text-xs text-[#888888] dark:text-[#a1a1a1]">No names, email addresses, phone numbers, or user registration required.</p>
+          </div>
+          <div class="p-4 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111] space-y-1">
+            <span class="text-xs font-mono text-[#ee0000] font-bold block">❌ File Content & Metadata</span>
+            <p class="text-xs text-[#888888] dark:text-[#a1a1a1]">No extracted GPS coordinates, camera serial numbers, or document text.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Cookies & Local Storage -->
+      <section class="space-y-3">
+        <h2 class="text-xl sm:text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
+          3. Cookies & Local Storage
+        </h2>
+        <p class="text-sm sm:text-base text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+          We use browser <code class="px-1.5 py-0.5 rounded bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-xs font-mono">localStorage</code> solely to remember your UI preference (Light Mode vs. Dark Mode). We do not use persistent tracking cookies or cross-site fingerprinting scripts.
+        </p>
+      </section>
+
+      <!-- 4. Third-Party Services -->
+      <section class="space-y-3">
+        <h2 class="text-xl sm:text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
+          4. Hosting & CDN Infrastructure
+        </h2>
+        <p class="text-sm sm:text-base text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+          Our website asset files (HTML, CSS, JavaScript, WebAssembly binaries) are served over encrypted HTTPS via standard edge CDN providers (e.g. Vercel). Standard web server access logs (such as anonymized IP address and browser user-agent) may be recorded by the hosting platform strictly for DDOS protection and network security purposes.
+        </p>
+      </section>
+
+      <!-- 5. GDPR & CCPA Compliance -->
+      <section class="space-y-3">
+        <h2 class="text-xl sm:text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
+          5. GDPR & CCPA Compliance
+        </h2>
+        <p class="text-sm sm:text-base text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+          Under the General Data Protection Regulation (GDPR) and California Consumer Privacy Act (CCPA), individuals have specific rights regarding personal data. Because metadatastripper.com does not collect, process, or sell any personal data or file metadata, your personal privacy is protected by default.
+        </p>
+      </section>
+
+      <!-- 6. Contact Us -->
+      <section class="space-y-3 pt-4 border-t border-[#ebebeb] dark:border-[#262626]">
+        <h2 class="text-xl sm:text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
+          Questions About Privacy?
+        </h2>
+        <p class="text-sm sm:text-base text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+          If you have any questions or feedback regarding our privacy architecture, please feel free to <a href="/contact" class="text-[#0070f3] hover:underline font-medium">contact our team</a>.
+        </p>
+      </section>
+
+    </div>
+
+  </main>
+  <Footer />
+</Layout>

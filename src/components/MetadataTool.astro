@@ -1,0 +1,602 @@
+---
+---
+<section id="tool" class="max-w-4xl mx-auto px-4 sm:px-6 pb-16">
+  <div class="bg-white dark:bg-[#111111] rounded-2xl border border-[#ebebeb] dark:border-[#262626] shadow-xl overflow-hidden card-elevated transition-colors duration-200">
+    
+    <!-- Step Progress Indicator -->
+    <div class="border-b border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] px-4 py-3 sm:px-6 flex items-center justify-between overflow-x-auto text-xs font-mono">
+      <div class="flex items-center gap-4 sm:gap-6 min-w-max">
+        <span id="step-1-badge" class="flex items-center gap-1.5 text-[#171717] dark:text-white font-semibold">
+          <span class="w-5 h-5 rounded-full bg-[#171717] dark:bg-white text-white dark:text-[#171717] flex items-center justify-center text-[10px]">1</span>
+          Upload
+        </span>
+        <span class="text-[#ebebeb] dark:text-[#333333]">→</span>
+        <span id="step-2-badge" class="flex items-center gap-1.5 text-[#888888]">
+          <span class="w-5 h-5 rounded-full bg-[#f5f5f5] dark:bg-[#262626] text-[#888888] flex items-center justify-center text-[10px]">2</span>
+          Scan &amp; Inspect
+        </span>
+        <span class="text-[#ebebeb] dark:text-[#333333]">→</span>
+        <span id="step-3-badge" class="flex items-center gap-1.5 text-[#888888]">
+          <span class="w-5 h-5 rounded-full bg-[#f5f5f5] dark:bg-[#262626] text-[#888888] flex items-center justify-center text-[10px]">3</span>
+          Remove &amp; Verify
+        </span>
+        <span class="text-[#ebebeb] dark:text-[#333333]">→</span>
+        <span id="step-4-badge" class="flex items-center gap-1.5 text-[#888888]">
+          <span class="w-5 h-5 rounded-full bg-[#f5f5f5] dark:bg-[#262626] text-[#888888] flex items-center justify-center text-[10px]">4</span>
+          Download
+        </span>
+      </div>
+      <span class="hidden md:inline-block text-[#888888] dark:text-[#666666]">Processed directly in your browser</span>
+    </div>
+
+    <!-- 1. UPLOAD STATE (Initial Server Rendered DOM) -->
+    <div id="state-upload" class="p-6 sm:p-10 text-center space-y-6">
+      
+      <!-- Speed Benefit Sub-header -->
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-xs font-mono text-[#4d4d4d] dark:text-[#a1a1a1]">
+        <span>⚡ Lightning-fast processing</span>
+        <span class="text-[#888888] dark:text-[#666666]">•</span>
+        <span class="text-[#888888] dark:text-[#a1a1a1] font-sans">No upload. Processed on your device.</span>
+      </div>
+
+      <div 
+        id="drop-zone" 
+        class="border-2 border-dashed border-[#a1a1a1]/40 dark:border-[#404040] hover:border-[#0070f3] dark:hover:border-[#0070f3] bg-[#fafafa] dark:bg-[#171717] hover:bg-[#0070f3]/5 rounded-xl p-8 sm:p-12 transition-all duration-200 cursor-pointer group flex flex-col items-center justify-center space-y-4"
+      >
+        <input 
+          type="file" 
+          id="file-input" 
+          class="hidden" 
+          accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" 
+        />
+        
+        <div class="w-16 h-16 rounded-full bg-white dark:bg-[#262626] border border-[#ebebeb] dark:border-[#333333] shadow-sm flex items-center justify-center text-[#171717] dark:text-white group-hover:scale-110 group-hover:border-[#0070f3] group-hover:text-[#0070f3] transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </div>
+
+        <div class="space-y-1">
+          <p class="text-base sm:text-lg font-semibold text-[#171717] dark:text-white">
+            Drag and drop your file here, or <span class="text-[#0070f3] underline underline-offset-2">browse</span>
+          </p>
+          <p class="text-xs text-[#888888] dark:text-[#a1a1a1] font-mono">
+            Supported Formats: JPG, JPEG, PNG, WebP • Max Size: 50MB
+          </p>
+        </div>
+
+        <!-- Primary CTA Button -->
+        <button 
+          type="button" 
+          id="btn-choose-file"
+          class="px-6 py-3 rounded-full bg-[#171717] dark:bg-white text-white dark:text-[#171717] font-medium text-sm hover:bg-[#333333] dark:hover:bg-[#e5e5e5] active:scale-98 transition-all shadow-md flex items-center gap-2"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>
+          Choose File
+        </button>
+      </div>
+
+      <!-- Format Redirection / Error Alert Banner -->
+      <div id="error-banner" class="hidden p-4 sm:p-5 rounded-xl border transition-all text-left">
+        <span id="error-message"></span>
+      </div>
+
+      <!-- Quick Tool Switcher Links -->
+      <div class="flex flex-wrap items-center justify-center gap-2 pt-1 text-xs font-mono text-[#888888] dark:text-[#a1a1a1]">
+        <span>Looking for another format?</span>
+        <a href="/video-metadata-remover" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-[#0070f3] hover:underline">
+          🎥 Video Remover
+        </a>
+        <a href="/pdf-metadata-remover" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-[#0070f3] hover:underline">
+          📄 PDF Remover
+        </a>
+      </div>
+
+      <!-- Subtle Trust Indicators Row -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-left">
+        <div class="p-3 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] space-y-0.5">
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-[#171717] dark:text-white">
+            <span>🔒</span> Private
+          </div>
+          <p class="text-[11px] text-[#888888] dark:text-[#a1a1a1] font-sans leading-tight">Your files stay on your device</p>
+        </div>
+
+        <div class="p-3 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] space-y-0.5">
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-[#171717] dark:text-white">
+            <span>⚡</span> Fast
+          </div>
+          <p class="text-[11px] text-[#888888] dark:text-[#a1a1a1] font-sans leading-tight">No upload or server processing</p>
+        </div>
+
+        <div class="p-3 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] space-y-0.5">
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-[#171717] dark:text-white">
+            <span>✓</span> Verified
+          </div>
+          <p class="text-[11px] text-[#888888] dark:text-[#a1a1a1] font-sans leading-tight">Cleaned file is rescanned after removal</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 2. SCAN & INSPECT STATE (Populated dynamically on file selection) -->
+    <div id="state-scan" class="hidden p-6 sm:p-8 space-y-6"></div>
+
+    <!-- 3. VERIFICATION & DOWNLOAD STATE (Populated dynamically after metadata removal) -->
+    <div id="state-verify" class="hidden p-6 sm:p-8 space-y-6"></div>
+
+  </div>
+</section>
+
+<!-- Interactive Client-side Script -->
+<script>
+  import { scanFileMetadata, removeMetadata, verifyCleanFile } from '../utils/metadataEngine.js';
+
+  let currentFile = null;
+  let scanResults = null;
+  let cleanedBlob = null;
+  let activeCategory = 'all';
+
+  // DOM Elements
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('file-input');
+  const btnChooseFile = document.getElementById('btn-choose-file');
+  const stateUpload = document.getElementById('state-upload');
+  const stateScan = document.getElementById('state-scan');
+  const stateVerify = document.getElementById('state-verify');
+  const errorBanner = document.getElementById('error-banner');
+
+  const step1Badge = document.getElementById('step-1-badge');
+  const step2Badge = document.getElementById('step-2-badge');
+  const step3Badge = document.getElementById('step-3-badge');
+  const step4Badge = document.getElementById('step-4-badge');
+
+  // Trigger File Input
+  btnChooseFile?.addEventListener('click', () => fileInput.click());
+  dropZone?.addEventListener('click', (e) => {
+    if (e.target !== btnChooseFile) fileInput.click();
+  });
+
+  // Drag & Drop Handlers
+  dropZone?.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('border-[#0070f3]', 'bg-[#0070f3]/5');
+  });
+  dropZone?.addEventListener('dragleave', () => {
+    dropZone.classList.remove('border-[#0070f3]', 'bg-[#0070f3]/5');
+  });
+  dropZone?.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('border-[#0070f3]', 'bg-[#0070f3]/5');
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFileSelected(e.dataTransfer.files[0]);
+    }
+  });
+
+  fileInput?.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files[0]) {
+      handleFileSelected(e.target.files[0]);
+    }
+  });
+
+  function showRedirectBanner(type, fileName, targetUrl, targetName, icon) {
+    if (!errorBanner) return;
+    errorBanner.className = 'p-4 sm:p-5 rounded-xl bg-[#0070f3]/10 border border-[#0070f3] text-[#171717] dark:text-white text-xs font-mono text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4';
+    errorBanner.innerHTML = `
+      <div class="flex items-start gap-3 min-w-0">
+        <span class="text-2xl shrink-0">${icon}</span>
+        <div class="space-y-1 min-w-0">
+          <h4 class="font-bold text-sm text-[#0070f3]">${escapeHtml(targetName)} Detected</h4>
+          <p class="text-[#4d4d4d] dark:text-[#a1a1a1] font-sans text-xs leading-relaxed">
+            You selected <strong class="font-mono text-[#171717] dark:text-white truncate max-w-[200px] inline-block align-bottom">${escapeHtml(fileName)}</strong>. To remove metadata from ${type === 'video' ? 'video files' : 'PDF documents'}, use our dedicated tool.
+          </p>
+        </div>
+      </div>
+      <a href="${targetUrl}" class="px-5 py-2.5 rounded-full bg-[#0070f3] hover:bg-[#0761d1] text-white font-semibold font-sans text-xs shadow-md transition-all whitespace-nowrap shrink-0 w-full sm:w-auto text-center">
+        Go to ${escapeHtml(targetName)} →
+      </a>
+    `;
+    errorBanner.classList.remove('hidden');
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  // File selection handler
+  async function handleFileSelected(file) {
+    if (errorBanner) errorBanner.classList.add('hidden');
+
+    const ext = file.name.split('.').pop().toLowerCase();
+    const isPdf = ext === 'pdf' || file.type === 'application/pdf';
+    const isVideo = ['mp4', 'mov', 'm4v', 'webm', 'mkv', 'avi'].includes(ext) || file.type.startsWith('video/');
+
+    if (isVideo) {
+      showRedirectBanner('video', file.name, '/video-metadata-remover', 'Video Metadata Remover', '🎥');
+      return;
+    }
+    if (isPdf) {
+      showRedirectBanner('pdf', file.name, '/pdf-metadata-remover', 'PDF Metadata Remover', '📄');
+      return;
+    }
+
+    currentFile = file;
+    updateStepBadges(2);
+
+    // Scan metadata
+    scanResults = await scanFileMetadata(file);
+
+    // Render scan state UI dynamically
+    renderScanState(file, scanResults);
+
+    // Show scan panel
+    stateUpload.classList.add('hidden');
+    stateScan.classList.remove('hidden');
+    stateVerify.classList.add('hidden');
+  }
+
+  // Dynamically render Scan State HTML
+  function renderScanState(file, results) {
+    stateScan.innerHTML = '';
+
+    const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+    const ext = file.name.split('.').pop().toUpperCase();
+    const previewUrl = file.type.startsWith('image/') ? URL.createObjectURL(file) : '';
+
+    // Header summary
+    const headerDiv = document.createElement('div');
+    headerDiv.className = 'flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626]';
+    
+    const headerLeft = document.createElement('div');
+    headerLeft.className = 'flex items-center gap-4 overflow-hidden';
+    
+    const previewContainer = document.createElement('div');
+    previewContainer.className = 'w-14 h-14 rounded-lg border border-[#ebebeb] dark:border-[#333333] bg-white dark:bg-[#111111] overflow-hidden flex-shrink-0 flex items-center justify-center';
+    if (previewUrl) {
+      const img = document.createElement('img');
+      img.className = 'w-full h-full object-cover';
+      img.src = previewUrl;
+      img.alt = 'Preview';
+      previewContainer.appendChild(img);
+    } else {
+      const span = document.createElement('span');
+      span.className = 'font-mono text-xs text-[#888888]';
+      span.textContent = ext;
+      previewContainer.appendChild(span);
+    }
+
+    const fileMetaDiv = document.createElement('div');
+    fileMetaDiv.className = 'min-w-0';
+    
+    const fileNameH3 = document.createElement('h3');
+    fileNameH3.className = 'text-sm font-semibold text-[#171717] dark:text-white truncate';
+    fileNameH3.textContent = file.name;
+
+    const fileMetaP = document.createElement('p');
+    fileMetaP.className = 'text-xs font-mono text-[#888888] dark:text-[#a1a1a1] mt-0.5';
+    fileMetaP.textContent = `${ext} • ${sizeMb} MB`;
+
+    fileMetaDiv.appendChild(fileNameH3);
+    fileMetaDiv.appendChild(fileMetaP);
+
+    headerLeft.appendChild(previewContainer);
+    headerLeft.appendChild(fileMetaDiv);
+
+    const changeBtn = document.createElement('button');
+    changeBtn.id = 'btn-change-file';
+    changeBtn.className = 'text-xs font-medium text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white px-3 py-1.5 rounded-full border border-[#ebebeb] dark:border-[#333333] bg-white dark:bg-[#111111] hover:bg-[#fafafa] dark:hover:bg-[#262626] transition-colors';
+    changeBtn.textContent = 'Change File';
+    changeBtn.addEventListener('click', resetToUploadState);
+
+    headerDiv.appendChild(headerLeft);
+    headerDiv.appendChild(changeBtn);
+    stateScan.appendChild(headerDiv);
+
+    // Location Warning
+    if (results.hasLocation) {
+      const warnDiv = document.createElement('div');
+      warnDiv.className = 'p-4 rounded-xl bg-[#ffefcf] dark:bg-[#2e1e05] border border-[#f5a623] text-[#ab570a] dark:text-[#fbbf24] flex items-start gap-3';
+      warnDiv.innerHTML = `
+        <span class="text-lg">⚠️</span>
+        <div class="space-y-1">
+          <h4 class="text-sm font-semibold">Location Data Detected</h4>
+          <p class="text-xs leading-relaxed opacity-90">
+            This file contains GPS coordinates. Click <strong>Remove Metadata</strong> below to strip this data.
+          </p>
+        </div>
+      `;
+      stateScan.appendChild(warnDiv);
+    }
+
+    // Metadata Summary & Category Tabs
+    const summaryCard = document.createElement('div');
+    summaryCard.className = 'border border-[#ebebeb] dark:border-[#262626] rounded-xl p-5 bg-[#fafafa] dark:bg-[#171717] space-y-4';
+    
+    const summaryHeader = document.createElement('div');
+    summaryHeader.className = 'flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2';
+    
+    const titleH4 = document.createElement('h4');
+    titleH4.className = 'text-xs font-mono uppercase tracking-wider text-[#888888] dark:text-[#a1a1a1] font-semibold';
+    titleH4.textContent = 'Metadata Summary';
+
+    const pillSpan = document.createElement('span');
+    pillSpan.className = 'px-3 py-1 rounded-full bg-[#171717] dark:bg-white text-white dark:text-[#171717] text-xs font-mono font-semibold';
+    pillSpan.textContent = `${results.totalCount} Metadata Tags Found`;
+
+    summaryHeader.appendChild(titleH4);
+    summaryHeader.appendChild(pillSpan);
+    summaryCard.appendChild(summaryHeader);
+
+    // Filter Chips
+    const chipsDiv = document.createElement('div');
+    chipsDiv.className = 'flex flex-wrap items-center gap-2 pt-2 border-t border-[#ebebeb] dark:border-[#262626] text-xs font-mono';
+    
+    const categoryKeys = [
+      { id: 'all', label: 'All Tags', count: results.totalCount },
+      { id: 'location', label: 'GPS Location', count: results.categories.location.length },
+      { id: 'camera', label: 'Camera & Device', count: results.categories.camera.length },
+      { id: 'datetime', label: 'Date & Time', count: results.categories.datetime.length },
+      { id: 'author', label: 'Author / Copyright', count: results.categories.author.length },
+      { id: 'software', label: 'Software', count: results.categories.software.length },
+      { id: 'other', label: 'Other Metadata', count: results.categories.other.length }
+    ].filter(c => c.id === 'all' || c.count > 0);
+
+    categoryKeys.forEach(cat => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = `px-3 py-1.5 rounded-lg border transition-all ${
+        activeCategory === cat.id 
+          ? 'bg-[#171717] dark:bg-white text-white dark:text-[#171717] border-transparent font-semibold shadow-xs' 
+          : 'bg-white dark:bg-[#111111] border-[#ebebeb] dark:border-[#262626] text-[#4d4d4d] dark:text-[#a1a1a1] hover:bg-[#f5f5f5] dark:hover:bg-[#262626]'
+      }`;
+      chip.textContent = `${cat.label} (${cat.count})`;
+      chip.addEventListener('click', () => {
+        activeCategory = cat.id;
+        renderScanState(file, results);
+      });
+      chipsDiv.appendChild(chip);
+    });
+
+    summaryCard.appendChild(chipsDiv);
+    stateScan.appendChild(summaryCard);
+
+    // Metadata Table
+    const tableContainer = document.createElement('div');
+    tableContainer.className = 'border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-hidden bg-white dark:bg-[#111111]';
+
+    const table = document.createElement('table');
+    table.className = 'w-full text-left text-xs font-mono';
+    
+    const thead = document.createElement('thead');
+    thead.className = 'bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[#888888] dark:text-[#a1a1a1]';
+    thead.innerHTML = `
+      <tr>
+        <th class="px-4 py-3 font-medium">Tag Name</th>
+        <th class="px-4 py-3 font-medium">Value</th>
+        <th class="px-4 py-3 font-medium text-right">Status</th>
+      </tr>
+    `;
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    tbody.className = 'divide-y divide-[#ebebeb] dark:divide-[#262626] text-[#171717] dark:text-white';
+
+    let displayTags = [];
+    if (activeCategory === 'all') {
+      Object.values(results.categories).forEach(arr => displayTags.push(...arr));
+    } else {
+      displayTags = results.categories[activeCategory] || [];
+    }
+
+    if (displayTags.length === 0) {
+      const emptyTr = document.createElement('tr');
+      emptyTr.innerHTML = `<td colspan="3" class="px-4 py-6 text-center text-[#888888]">No metadata tags found in this category.</td>`;
+      tbody.appendChild(emptyTr);
+    } else {
+      displayTags.forEach(tag => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-[#fafafa] dark:hover:bg-[#171717] transition-colors';
+        tr.innerHTML = `
+          <td class="px-4 py-3 text-[#4d4d4d] dark:text-[#a1a1a1] font-semibold">${escapeHtml(tag.name)}</td>
+          <td class="px-4 py-3 text-[#171717] dark:text-white break-all max-w-xs sm:max-w-md">${escapeHtml(tag.value)}</td>
+          <td class="px-4 py-3 text-right font-medium text-[#10b981]">Will be stripped ✓</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    table.appendChild(tbody);
+    tableContainer.appendChild(table);
+    stateScan.appendChild(tableContainer);
+
+    // Action Row
+    const actionRow = document.createElement('div');
+    actionRow.className = 'pt-4 border-t border-[#ebebeb] dark:border-[#262626] flex items-center justify-between';
+    
+    const noteSpan = document.createElement('span');
+    noteSpan.className = 'text-xs text-[#888888] dark:text-[#a1a1a1] font-mono';
+    noteSpan.textContent = 'All EXIF, GPS, and camera metadata will be permanently removed.';
+
+    const removeBtn = document.createElement('button');
+    removeBtn.id = 'btn-remove-metadata';
+    removeBtn.className = 'px-8 py-3 rounded-full bg-[#171717] dark:bg-white hover:bg-[#333333] dark:hover:bg-[#e5e5e5] text-white dark:text-[#171717] font-semibold text-sm shadow-md active:scale-98 transition-all flex items-center gap-2';
+    removeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg> Remove Metadata`;
+    removeBtn.addEventListener('click', handleRemoveMetadata);
+
+    actionRow.appendChild(noteSpan);
+    actionRow.appendChild(removeBtn);
+    stateScan.appendChild(actionRow);
+  }
+
+  // Remove Metadata Action
+  async function handleRemoveMetadata() {
+    if (!currentFile) return;
+
+    const btnRemoveMetadata = document.getElementById('btn-remove-metadata');
+    if (btnRemoveMetadata) {
+      btnRemoveMetadata.disabled = true;
+      btnRemoveMetadata.innerHTML = `
+        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Processing...
+      `;
+    }
+
+    updateStepBadges(3);
+    const startTime = performance.now();
+
+    try {
+      cleanedBlob = await removeMetadata(currentFile);
+      const verifyReport = await verifyCleanFile(cleanedBlob);
+      const endTime = performance.now();
+      const durationSeconds = ((endTime - startTime) / 1000).toFixed(2);
+
+      const cleanUrl = URL.createObjectURL(cleanedBlob);
+      const parts = currentFile.name.split('.');
+      const ext = parts.pop();
+      const cleanFileName = `${parts.join('.')}_clean.${ext}`;
+
+      renderVerifyState(verifyReport, durationSeconds, cleanUrl, cleanFileName);
+
+      updateStepBadges(4);
+      stateScan.classList.add('hidden');
+      stateVerify.classList.remove('hidden');
+    } catch (err) {
+      alert('Error removing metadata: ' + err.message);
+      if (btnRemoveMetadata) {
+        btnRemoveMetadata.disabled = false;
+        btnRemoveMetadata.innerHTML = `Remove Metadata`;
+      }
+    }
+  }
+
+  // Dynamically render Verify State HTML
+  function renderVerifyState(report, durationSeconds, cleanUrl, cleanFileName) {
+    stateVerify.innerHTML = '';
+
+    const isAllClean = report.verified && !report.hasRemaining;
+
+    const banner = document.createElement('div');
+    banner.className = `p-4 rounded-xl ${isAllClean ? 'bg-[#d1fae5] dark:bg-[#064e3b] border border-[#10b981] text-[#065f46] dark:text-[#a7f3d0]' : 'bg-[#ffefcf] dark:bg-[#2e1e05] border border-[#f5a623] text-[#ab570a] dark:text-[#fbbf24]'} flex items-center justify-between gap-3 flex-col sm:flex-row`;
+    
+    banner.innerHTML = `
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full ${isAllClean ? 'bg-[#10b981]' : 'bg-[#f5a623]'} text-white flex items-center justify-center font-bold flex-shrink-0">
+          ${isAllClean ? '✓' : '⚠️'}
+        </div>
+        <div>
+          <h4 class="text-sm font-semibold">${isAllClean ? 'Metadata Removed & Verified' : 'Partial Metadata Removed'}</h4>
+          <p class="text-xs opacity-90 mt-0.5 font-mono">
+            ${isAllClean ? '100% of EXIF, GPS, and sensitive tags have been stripped.' : 'Some unclassified system tags could not be automatically removed.'}
+          </p>
+        </div>
+      </div>
+      <div class="px-3 py-1.5 rounded-lg bg-white/70 dark:bg-black/40 border border-current/30 text-xs font-mono font-medium self-start sm:self-auto">
+        ⚡ Processing time: ${durationSeconds}s
+      </div>
+    `;
+
+    const auditContainer = document.createElement('div');
+    auditContainer.className = 'border border-[#ebebeb] dark:border-[#262626] rounded-xl p-5 bg-[#fafafa] dark:bg-[#171717] space-y-4';
+    
+    const auditHeader = document.createElement('div');
+    auditHeader.className = 'flex items-center justify-between';
+    
+    const auditTitle = document.createElement('h4');
+    auditTitle.className = 'text-xs font-mono uppercase tracking-wider text-[#888888] dark:text-[#a1a1a1]';
+    auditTitle.textContent = 'Verification Audit Report';
+
+    const pill = document.createElement('span');
+    pill.className = `px-2.5 py-1 rounded-full ${isAllClean ? 'bg-[#10b981]' : 'bg-[#f5a623]'} text-white text-xs font-mono font-bold`;
+    pill.textContent = `${report.removedCount} / ${report.totalOriginal} Tags Removed`;
+
+    auditHeader.appendChild(auditTitle);
+    auditHeader.appendChild(pill);
+    auditContainer.appendChild(auditHeader);
+
+    const listGrid = document.createElement('div');
+    listGrid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono';
+    
+    const auditCategories = [
+      { name: 'GPS Location Data', key: 'location' },
+      { name: 'Camera & Device Model', key: 'camera' },
+      { name: 'Date & Time Timestamps', key: 'datetime' },
+      { name: 'Author & Copyright', key: 'author' },
+      { name: 'Software & Firmware', key: 'software' }
+    ];
+
+    auditCategories.forEach(cat => {
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'flex items-center justify-between p-3 rounded-lg bg-white dark:bg-[#111111] border border-[#ebebeb] dark:border-[#262626]';
+      itemDiv.innerHTML = `
+        <span class="text-[#4d4d4d] dark:text-[#a1a1a1] font-semibold">${cat.name}</span>
+        <span class="text-[#10b981] font-semibold flex items-center gap-1">✓ Clean</span>
+      `;
+      listGrid.appendChild(itemDiv);
+    });
+
+    auditContainer.appendChild(listGrid);
+
+    const actionRow = document.createElement('div');
+    actionRow.className = 'pt-4 border-t border-[#ebebeb] dark:border-[#262626] flex flex-col sm:flex-row items-center justify-between gap-4';
+
+    const anotherBtn = document.createElement('button');
+    anotherBtn.className = 'w-full sm:w-auto px-6 py-3 rounded-full border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#171717] hover:bg-[#fafafa] dark:hover:bg-[#262626] text-[#171717] dark:text-white font-medium text-xs transition-colors';
+    anotherBtn.textContent = 'Process Another File';
+    anotherBtn.addEventListener('click', resetToUploadState);
+
+    const downloadLink = document.createElement('a');
+    downloadLink.href = cleanUrl;
+    downloadLink.download = cleanFileName;
+    downloadLink.className = 'w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#0070f3] hover:bg-[#0761d1] text-white font-semibold text-sm shadow-md active:scale-98 transition-all flex items-center justify-center gap-2 text-center';
+    downloadLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download Clean File`;
+
+    actionRow.appendChild(anotherBtn);
+    actionRow.appendChild(downloadLink);
+
+    stateVerify.appendChild(banner);
+    stateVerify.appendChild(auditContainer);
+    stateVerify.appendChild(actionRow);
+  }
+
+  // Reset UI
+  function resetToUploadState() {
+    currentFile = null;
+    scanResults = null;
+    cleanedBlob = null;
+    activeCategory = 'all';
+    fileInput.value = '';
+
+    stateScan.innerHTML = '';
+    stateVerify.innerHTML = '';
+
+    updateStepBadges(1);
+    if (errorBanner) errorBanner.classList.add('hidden');
+    stateUpload.classList.remove('hidden');
+    stateScan.classList.add('hidden');
+    stateVerify.classList.add('hidden');
+  }
+
+  // Update step progress badges UI
+  function updateStepBadges(stepNumber) {
+    [step1Badge, step2Badge, step3Badge, step4Badge].forEach((badge, idx) => {
+      if (!badge) return;
+      const num = idx + 1;
+      const circle = badge.querySelector('span');
+      if (num <= stepNumber) {
+        badge.className = 'flex items-center gap-1.5 text-[#171717] dark:text-white font-semibold';
+        if (circle) circle.className = 'w-5 h-5 rounded-full bg-[#171717] dark:bg-white text-white dark:text-[#171717] flex items-center justify-center text-[10px]';
+      } else {
+        badge.className = 'flex items-center gap-1.5 text-[#888888]';
+        if (circle) circle.className = 'w-5 h-5 rounded-full bg-[#f5f5f5] dark:bg-[#262626] text-[#888888] flex items-center justify-center text-[10px]';
+      }
+    });
+  }
+</script>

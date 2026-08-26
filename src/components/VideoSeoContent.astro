@@ -1,0 +1,231 @@
+---
+---
+<section id="how-it-works" class="max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-16 border-t border-[#ebebeb] dark:border-[#262626]">
+  
+  <!-- Section 1: What is video metadata? -->
+  <div class="space-y-6">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-xs font-mono text-[#888888] dark:text-[#a1a1a1]">
+      <span>VIDEO PRIVACY EXPLAINED</span>
+    </div>
+    
+    <h3 class="text-2xl sm:text-4xl font-semibold text-[#171717] dark:text-white tracking-tight">
+      What is video metadata?
+    </h3>
+    
+    <p class="text-sm sm:text-base text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+      Video metadata is hidden technical and personal data embedded inside video container files (such as MP4 and MOV). Created automatically by smartphones, digital cameras, drones, and video editing applications, metadata tracks file creation details, device parameters, and author information.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+      <div class="p-5 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111] space-y-2 card-hairline">
+        <h4 class="text-xs font-mono text-[#888888] dark:text-[#a1a1a1] uppercase tracking-wider">🚨 Sensitive Personal Information</h4>
+        <ul class="text-xs text-[#171717] dark:text-white space-y-1.5 font-mono list-disc list-inside">
+          <li>GPS Coordinates (Latitude, Longitude &amp; Altitude)</li>
+          <li>Exact Creation &amp; Modification Timestamps</li>
+          <li>Device Make, Model &amp; Serial IDs</li>
+          <li>Author, Artist &amp; Copyright Ownership</li>
+          <li>Video Title, Comment &amp; User Tags</li>
+        </ul>
+      </div>
+
+      <div class="p-5 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111] space-y-2 card-hairline">
+        <h4 class="text-xs font-mono text-[#888888] dark:text-[#a1a1a1] uppercase tracking-wider">📷 Technical Container Data</h4>
+        <ul class="text-xs text-[#171717] dark:text-white space-y-1.5 font-mono list-disc list-inside">
+          <li>Video &amp; Audio Encoder Software (Premiere, Handbrake)</li>
+          <li>Handler Names &amp; Track IDs</li>
+          <li>Timecode Tracks &amp; Frame Rate Data</li>
+          <li>Embedded XMP Data Streams</li>
+          <li>Custom QuickTime udta / meta Atoms</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: What metadata can an MP4 contain? -->
+  <div class="space-y-6">
+    <h3 class="text-2xl sm:text-3xl font-semibold text-[#171717] dark:text-white tracking-tight">
+      What metadata can an MP4 contain?
+    </h3>
+    
+    <p class="text-sm text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+      An MP4 file (ISO Base Media File Format) uses nested container boxes (`moov`, `udta`, `meta`, `ilst`, `keys`) that store extensive metadata attributes:
+    </p>
+
+    <div class="border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-hidden bg-white dark:bg-[#111111]">
+      <table class="w-full text-left text-xs font-mono">
+        <thead class="bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[#888888] dark:text-[#a1a1a1]">
+          <tr>
+            <th class="px-4 py-3 font-medium">MP4 Box Atom</th>
+            <th class="px-4 py-3 font-medium">Stored Information</th>
+            <th class="px-4 py-3 font-medium">Privacy Impact</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[#ebebeb] dark:divide-[#262626] text-[#171717] dark:text-white">
+          <tr>
+            <td class="px-4 py-2.5 font-semibold">`moov.udta.location`</td>
+            <td class="px-4 py-2.5">GPS Location Coordinates</td>
+            <td class="px-4 py-2.5 text-[#ee0000]">High Privacy Risk</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 font-semibold">`mvhd.creation_time`</td>
+            <td class="px-4 py-2.5">File Creation &amp; Export Date</td>
+            <td class="px-4 py-2.5 text-[#f5a623]">Medium Risk</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 font-semibold">`com.apple.quicktime.make`</td>
+            <td class="px-4 py-2.5">Camera Manufacturer (Apple, Samsung)</td>
+            <td class="px-4 py-2.5 text-[#f5a623]">Medium Risk</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 font-semibold">`handler_name` / `encoder`</td>
+            <td class="px-4 py-2.5">Editing Application Name</td>
+            <td class="px-4 py-2.5 text-[#888888]">Low Risk</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Section 3: Can video metadata reveal your location? -->
+  <div class="space-y-6">
+    <h3 class="text-2xl sm:text-3xl font-semibold text-[#171717] dark:text-white tracking-tight">
+      Can video metadata reveal your location?
+    </h3>
+    
+    <p class="text-sm text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+      <strong>Yes.</strong> Smartphones (iPhones and Android devices) with Location Services enabled automatically embed exact GPS latitude, longitude, and altitude coordinates inside recorded video clips. Anyone who downloads an un-stripped MP4 or MOV file can read these coordinates and pinpoint where the video was captured.
+    </p>
+  </div>
+
+  <!-- Section 4: Why remove metadata from a video? -->
+  <div class="p-8 rounded-2xl bg-[#171717] dark:bg-[#111111] dark:border dark:border-[#262626] text-white space-y-6">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 dark:bg-white/5 text-xs font-mono text-white/80">
+      <span>PRIVACY GUARANTEE</span>
+    </div>
+
+    <h3 class="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
+      Why remove metadata from a video?
+    </h3>
+
+    <p class="text-sm text-white/80 leading-relaxed">
+      Sharing video clips on social media, messaging platforms, or public file hosts without stripping container metadata can expose your home address, daily routines, device details, and copyright ownership to strangers. Removing metadata protects your personal privacy and anonymity online.
+    </p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 text-xs font-mono">
+      <div class="p-4 rounded-xl bg-white/5 dark:bg-white/5 border border-white/10 space-y-1">
+        <span class="text-base text-white">📍 Location Privacy</span>
+        <p class="text-white/70">Strips GPS coordinates from recorded video clips before sharing.</p>
+      </div>
+      <div class="p-4 rounded-xl bg-white/5 dark:bg-white/5 border border-white/10 space-y-1">
+        <span class="text-base text-white">🔒 Anonymity</span>
+        <p class="text-white/70">Clears device make, model, author tags, and editing software logs.</p>
+      </div>
+      <div class="p-4 rounded-xl bg-white/5 dark:bg-white/5 border border-white/10 space-y-1">
+        <span class="text-base text-white">⚡ Zero Server Risk</span>
+        <p class="text-white/70">Files are processed 100% locally in your web browser via WebAssembly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5: Does removing metadata reduce video quality? -->
+  <div class="space-y-6">
+    <h3 class="text-2xl sm:text-3xl font-semibold text-[#171717] dark:text-white tracking-tight">
+      Does removing metadata reduce video quality?
+    </h3>
+    
+    <p class="text-sm text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+      <strong>No.</strong> Removes supported video metadata without re-encoding the media streams. Our tool uses <strong>Stream Copying (`-c copy`)</strong> powered by WebAssembly, which demuxes container metadata boxes and remuxes video and audio streams untouched. Video pixels, resolution, framerate, and audio quality remain 100% preserved.
+    </p>
+  </div>
+
+  <!-- Section 6: Is my video uploaded? -->
+  <div class="space-y-6">
+    <h3 class="text-2xl sm:text-3xl font-semibold text-[#171717] dark:text-white tracking-tight">
+      Is my video uploaded?
+    </h3>
+    
+    <p class="text-sm text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+      <strong>No.</strong> Your video never leaves your device. All video processing, scanning, metadata removal, and file verification are executed locally inside your Web browser using client-side WebAssembly (`@ffmpeg/ffmpeg`). Your files are never uploaded to any remote server.
+    </p>
+  </div>
+
+  <!-- Section 7: How does the Video Metadata Remover work? -->
+  <div class="space-y-6">
+    <h3 class="text-2xl sm:text-3xl font-semibold text-[#171717] dark:text-white tracking-tight">
+      How does the Video Metadata Remover work?
+    </h3>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 font-mono text-xs text-center">
+      <div class="p-4 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111]">
+        <span class="font-bold block text-sm">1. Upload</span>
+        <span class="text-[#888888] text-[11px]">Select MP4 or MOV</span>
+      </div>
+      <div class="p-4 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111]">
+        <span class="font-bold block text-sm">2. Scan</span>
+        <span class="text-[#888888] text-[11px]">Detect container tags</span>
+      </div>
+      <div class="p-4 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111]">
+        <span class="font-bold block text-sm">3. Remove</span>
+        <span class="text-[#888888] text-[11px]">Stream copy remux</span>
+      </div>
+      <div class="p-4 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111]">
+        <span class="font-bold block text-sm">4. Verify</span>
+        <span class="text-[#888888] text-[11px]">Rescan output file</span>
+      </div>
+      <div class="p-4 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111]">
+        <span class="font-bold block text-sm">5. Download</span>
+        <span class="text-[#888888] text-[11px]">Save clean video</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 8: FAQ Section -->
+  <div id="faq" class="space-y-6">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-xs font-mono text-[#888888] dark:text-[#a1a1a1]">
+      <span>FREQUENTLY ASKED QUESTIONS</span>
+    </div>
+
+    <h3 class="text-2xl sm:text-3xl font-semibold text-[#171717] dark:text-white tracking-tight">
+      FAQ
+    </h3>
+
+    <div class="space-y-4 font-sans">
+      <div class="p-5 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111] space-y-2 card-hairline">
+        <h4 class="text-base font-semibold text-[#171717] dark:text-white">Which video formats are supported?</h4>
+        <p class="text-sm text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+          Currently, MP4 and MOV video formats are supported.
+        </p>
+      </div>
+
+      <div class="p-5 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111] space-y-2 card-hairline">
+        <h4 class="text-base font-semibold text-[#171717] dark:text-white">Is there a video file size limit?</h4>
+        <p class="text-sm text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+          We recommend video files up to 250MB for mobile reliability and smooth browser RAM management.
+        </p>
+      </div>
+
+      <div class="p-5 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111] space-y-2 card-hairline">
+        <h4 class="text-base font-semibold text-[#171717] dark:text-white">How do I verify that video metadata was removed?</h4>
+        <p class="text-sm text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+          Our built-in verification system automatically rescans the cleaned video output file after processing and displays a full verification audit showing exactly which metadata tags were removed.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 9: Cross Links to Other Tools -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+    <div class="p-6 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] space-y-2">
+      <h4 class="text-sm font-semibold text-[#171717] dark:text-white">Need to strip metadata from images?</h4>
+      <p class="text-xs text-[#888888] dark:text-[#a1a1a1] font-mono">Use our Image Metadata Remover to strip EXIF, GPS &amp; camera data from JPG, PNG &amp; WebP photos.</p>
+      <a href="/" class="inline-block pt-2 text-xs font-medium text-[#0070f3] hover:underline">Try Image Metadata Remover →</a>
+    </div>
+
+    <div class="p-6 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] space-y-2">
+      <h4 class="text-sm font-semibold text-[#171717] dark:text-white">Need to remove metadata from PDF files?</h4>
+      <p class="text-xs text-[#888888] dark:text-[#a1a1a1] font-mono">Use our PDF Metadata Remover to clear Author, Title, Creation dates &amp; XMP data from PDF documents.</p>
+      <a href="/pdf-metadata-remover" class="inline-block pt-2 text-xs font-medium text-[#0070f3] hover:underline">Try PDF Metadata Remover →</a>
+    </div>
+  </div>
+
+</section>

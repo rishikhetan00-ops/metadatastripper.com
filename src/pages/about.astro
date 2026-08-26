@@ -1,0 +1,102 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const pageTitle = "About Us – Metadata Remover | Free & Private EXIF Stripper Engine";
+const pageDescription = "Learn about metadatastripper.com, the leading 100% browser-based metadata removal platform built for digital privacy, security, and anonymity.";
+const pageKeywords = "About metadata remover, metadatastripper about, free exif stripper, privacy tool, client side metadata removal";
+---
+
+<Layout title={pageTitle} description={pageDescription} keywords={pageKeywords}>
+  <Header />
+  <main class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-12">
+    
+    <!-- Header Hero -->
+    <div class="space-y-4 border-b border-[#ebebeb] dark:border-[#262626] pb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-xs font-mono text-[#888888] dark:text-[#a1a1a1]">
+        <span>MISSION & TECHNOLOGY</span>
+      </div>
+      
+      <h1 class="text-3xl sm:text-5xl font-semibold text-[#171717] dark:text-white tracking-tight">
+        About Metadata Remover
+      </h1>
+      
+      <p class="text-base sm:text-lg text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+        Building a zero-trust, browser-native suite that empowers everyone to strip hidden metadata and protect their privacy online.
+      </p>
+    </div>
+
+    <!-- Core Grid Story -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 font-sans">
+      <div class="p-6 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111] space-y-3 card-hairline">
+        <div class="text-2xl">🛡️</div>
+        <h3 class="text-lg font-semibold text-[#171717] dark:text-white">Privacy First</h3>
+        <p class="text-xs sm:text-sm text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+          Traditional online tools force users to upload sensitive personal files to distant cloud servers. We pioneered a 100% client-side engine so your files never leave your device.
+        </p>
+      </div>
+
+      <div class="p-6 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111] space-y-3 card-hairline">
+        <div class="text-2xl">⚡</div>
+        <h3 class="text-lg font-semibold text-[#171717] dark:text-white">Zero Quality Loss</h3>
+        <p class="text-xs sm:text-sm text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+          Our binary parsing technology purges metadata headers (EXIF, IPTC, XMP, container boxes) directly without re-encoding pixels or video frames, preserving 100% of visual fidelity.
+        </p>
+      </div>
+
+      <div class="p-6 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111] space-y-3 card-hairline">
+        <div class="text-2xl">🌐</div>
+        <h3 class="text-lg font-semibold text-[#171717] dark:text-white">100% Free Forever</h3>
+        <p class="text-xs sm:text-sm text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+          We believe basic privacy tools should be accessible to everyone without paywalls, subscriptions, file limits, or intrusive watermarks.
+        </p>
+      </div>
+    </div>
+
+    <!-- Detailed About Story -->
+    <div class="space-y-8 font-sans text-[#171717] dark:text-white">
+      
+      <section class="space-y-4">
+        <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight text-[#171717] dark:text-white">
+          Why Metadata Privacy Matters
+        </h2>
+        <p class="text-sm sm:text-base text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+          Every time you snap a photo with your smartphone, export a contract PDF, or record a video clip, your device silently writes hidden background data inside the file. Known as metadata or EXIF data, this header payload often includes:
+        </p>
+        <ul class="text-sm text-[#4d4d4d] dark:text-[#a1a1a1] space-y-2 font-mono list-disc list-inside bg-[#fafafa] dark:bg-[#141414] p-5 rounded-xl border border-[#ebebeb] dark:border-[#262626]">
+          <li><strong>GPS Location:</strong> Exact latitude, longitude, and elevation of your home or workplace</li>
+          <li><strong>Timestamps:</strong> Date, exact time, and time zone when the media was recorded</li>
+          <li><strong>Hardware Specs:</strong> Smartphone brand, camera lens, shutter speed, ISO, and serial numbers</li>
+          <li><strong>Author Tags:</strong> Full legal names, computer usernames, and software editing history</li>
+        </ul>
+        <p class="text-sm sm:text-base text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+          Sharing un-stripped files on social media, messaging platforms, or public forums exposes you to tracking, stalking, and identity theft. <strong>metadatastripper.com</strong> provides an instant, foolproof solution to strip this data cleanly in seconds.
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight text-[#171717] dark:text-white">
+          Our All-in-One Metadata Removal Suite
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-mono pt-2">
+          <a href="/" class="p-4 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111] space-y-2 hover:border-[#0070f3] transition-all">
+            <span class="text-base text-[#171717] dark:text-white font-bold block">📷 Image EXIF Remover</span>
+            <span class="text-[#888888]">Strips EXIF, GPS, and XMP tags from JPG, PNG, and WebP photos.</span>
+          </a>
+          <a href="/pdf-metadata-remover" class="p-4 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111] space-y-2 hover:border-[#0070f3] transition-all">
+            <span class="text-base text-[#171717] dark:text-white font-bold block">📄 PDF Metadata Cleaner</span>
+            <span class="text-[#888888]">Purges Info dictionary, author tags, and creation dates from PDF files.</span>
+          </a>
+          <a href="/video-metadata-remover" class="p-4 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#111111] space-y-2 hover:border-[#0070f3] transition-all">
+            <span class="text-base text-[#171717] dark:text-white font-bold block">🎥 Video Container Demuxer</span>
+            <span class="text-[#888888]">Strips QuickTime udta, GPS, and moov metadata from MP4 and MOV files.</span>
+          </a>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+  <Footer />
+</Layout>

@@ -1,0 +1,152 @@
+---
+const pathname = Astro.url.pathname;
+const isHome = pathname === '/' || pathname === '';
+const isPdf = pathname === '/pdf-metadata-remover' || pathname === '/pdf-metadata-remover/';
+const isVideo = pathname === '/video-metadata-remover' || pathname === '/video-metadata-remover/';
+---
+<header class="w-full bg-white dark:bg-[#0a0a0a] border-b border-[#ebebeb] dark:border-[#262626] sticky top-0 z-50 transition-colors duration-200">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <!-- Brand Logo -->
+    <a href="/" class="flex items-center gap-3 group shrink-0">
+      <div class="w-9 h-9 rounded-lg bg-[#171717] dark:bg-white text-white dark:text-[#171717] flex items-center justify-center font-bold text-lg shadow-sm group-hover:scale-105 transition-transform duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="m9 12 2 2 4-4"/>
+        </svg>
+      </div>
+      <div class="flex flex-col">
+        <span class="font-semibold text-sm sm:text-base text-[#171717] dark:text-white tracking-tight leading-none group-hover:text-[#0070f3] dark:group-hover:text-[#0070f3] transition-colors">
+          Metadata Remover
+        </span>
+        <span class="text-[11px] sm:text-xs text-[#888888] dark:text-[#a1a1a1] font-mono leading-tight mt-0.5">
+          metadatastripper.com
+        </span>
+      </div>
+    </a>
+
+    <!-- Desktop Navigation Links (hidden on mobile, visible on md+) -->
+    <div class="hidden md:flex items-center gap-1 sm:gap-2">
+      <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-xs text-[#4d4d4d] dark:text-[#a1a1a1] font-medium mr-1">
+        <span class="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></span>
+        <span>Your files never leave your device</span>
+      </div>
+
+      <a 
+        href="/" 
+        class={`text-xs font-medium px-3 py-1.5 rounded-full transition-colors ${isHome ? 'bg-[#171717] dark:bg-white text-white dark:text-[#171717]' : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#171717]'}`}
+      >
+        Image Tool
+      </a>
+      <a 
+        href="/pdf-metadata-remover" 
+        class={`text-xs font-medium px-3 py-1.5 rounded-full transition-colors ${isPdf ? 'bg-[#171717] dark:bg-white text-white dark:text-[#171717]' : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#171717]'}`}
+      >
+        PDF Remover
+      </a>
+      <a 
+        href="/video-metadata-remover" 
+        class={`text-xs font-medium px-3 py-1.5 rounded-full transition-colors ${isVideo ? 'bg-[#171717] dark:bg-white text-white dark:text-[#171717]' : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#171717]'}`}
+      >
+        Video Remover
+      </a>
+
+      <!-- Theme Toggle Button -->
+      <button
+        id="theme-toggle"
+        type="button"
+        aria-label="Toggle dark mode"
+        class="w-9 h-9 rounded-full bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-[#171717] dark:text-white flex items-center justify-center hover:bg-[#f5f5f5] dark:hover:bg-[#262626] transition-colors ml-1"
+      >
+        <svg id="sun-icon" class="w-4 h-4 hidden dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <svg id="moon-icon" class="w-4 h-4 block dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Controls (Theme Toggle + Hamburger Menu Button) -->
+    <div class="flex items-center gap-2 md:hidden">
+      <button
+        id="theme-toggle-mobile"
+        type="button"
+        aria-label="Toggle dark mode"
+        class="w-8 h-8 rounded-full bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-[#171717] dark:text-white flex items-center justify-center hover:bg-[#f5f5f5] dark:hover:bg-[#262626] transition-colors"
+      >
+        <svg class="w-4 h-4 hidden dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <svg class="w-4 h-4 block dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </button>
+
+      <button
+        id="mobile-menu-btn"
+        type="button"
+        aria-label="Toggle mobile menu"
+        class="w-8 h-8 rounded-lg bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-[#171717] dark:text-white flex items-center justify-center hover:bg-[#f5f5f5] dark:hover:bg-[#262626] transition-colors"
+      >
+        <svg id="hamburger-icon" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg id="close-icon" class="w-5 h-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Dropdown Navigation Drawer -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#0a0a0a] px-4 py-3 space-y-2">
+    <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-xs text-[#4d4d4d] dark:text-[#a1a1a1] font-medium">
+      <span class="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></span>
+      <span>100% Client-side. Files stay on your device</span>
+    </div>
+
+    <div class="grid grid-cols-3 gap-2 pt-1">
+      <a 
+        href="/" 
+        class={`text-xs font-medium py-2 px-2 rounded-lg text-center transition-colors ${isHome ? 'bg-[#171717] dark:bg-white text-white dark:text-[#171717] font-semibold' : 'bg-[#fafafa] dark:bg-[#171717] text-[#4d4d4d] dark:text-[#a1a1a1] border border-[#ebebeb] dark:border-[#262626]'}`}
+      >
+        Image Tool
+      </a>
+      <a 
+        href="/pdf-metadata-remover" 
+        class={`text-xs font-medium py-2 px-2 rounded-lg text-center transition-colors ${isPdf ? 'bg-[#171717] dark:bg-white text-white dark:text-[#171717] font-semibold' : 'bg-[#fafafa] dark:bg-[#171717] text-[#4d4d4d] dark:text-[#a1a1a1] border border-[#ebebeb] dark:border-[#262626]'}`}
+      >
+        PDF Remover
+      </a>
+      <a 
+        href="/video-metadata-remover" 
+        class={`text-xs font-medium py-2 px-2 rounded-lg text-center transition-colors ${isVideo ? 'bg-[#171717] dark:bg-white text-white dark:text-[#171717] font-semibold' : 'bg-[#fafafa] dark:bg-[#171717] text-[#4d4d4d] dark:text-[#a1a1a1] border border-[#ebebeb] dark:border-[#262626]'}`}
+      >
+        Video Remover
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const hamburgerIcon = document.getElementById('hamburger-icon');
+  const closeIcon = document.getElementById('close-icon');
+
+  function toggleTheme() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  }
+
+  themeToggle?.addEventListener('click', toggleTheme);
+  themeToggleMobile?.addEventListener('click', toggleTheme);
+
+  mobileMenuBtn?.addEventListener('click', () => {
+    const isHidden = mobileMenu?.classList.toggle('hidden');
+    hamburgerIcon?.classList.toggle('hidden', !isHidden);
+    closeIcon?.classList.toggle('hidden', isHidden);
+  });
+</script>

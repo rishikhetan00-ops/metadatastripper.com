@@ -1,0 +1,653 @@
+---
+---
+<section id="tool" class="max-w-4xl mx-auto px-4 sm:px-6 pb-16">
+  <div class="bg-white dark:bg-[#111111] rounded-2xl border border-[#ebebeb] dark:border-[#262626] shadow-xl overflow-hidden card-elevated transition-colors duration-200">
+    
+    <!-- Step Progress Indicator -->
+    <div class="border-b border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] px-3 py-3 sm:px-6 flex items-center justify-between overflow-x-auto text-xs font-mono">
+      <div class="flex items-center gap-3 sm:gap-6 min-w-max">
+        <span id="video-step-1-badge" class="flex items-center gap-1.5 text-[#171717] dark:text-white font-semibold">
+          <span class="w-5 h-5 rounded-full bg-[#171717] dark:bg-white text-white dark:text-[#171717] flex items-center justify-center text-[10px]">1</span>
+          Upload
+        </span>
+        <span class="text-[#ebebeb] dark:text-[#333333]">→</span>
+        <span id="video-step-2-badge" class="flex items-center gap-1.5 text-[#888888]">
+          <span class="w-5 h-5 rounded-full bg-[#f5f5f5] dark:bg-[#262626] text-[#888888] flex items-center justify-center text-[10px]">2</span>
+          Scan
+        </span>
+        <span class="text-[#ebebeb] dark:text-[#333333]">→</span>
+        <span id="video-step-3-badge" class="flex items-center gap-1.5 text-[#888888]">
+          <span class="w-5 h-5 rounded-full bg-[#f5f5f5] dark:bg-[#262626] text-[#888888] flex items-center justify-center text-[10px]">3</span>
+          Remove &amp; Verify
+        </span>
+        <span class="text-[#ebebeb] dark:text-[#333333]">→</span>
+        <span id="video-step-4-badge" class="flex items-center gap-1.5 text-[#888888]">
+          <span class="w-5 h-5 rounded-full bg-[#f5f5f5] dark:bg-[#262626] text-[#888888] flex items-center justify-center text-[10px]">4</span>
+          Download
+        </span>
+      </div>
+      <span class="hidden md:inline-block text-[#888888] dark:text-[#666666]">Processed directly in your browser</span>
+    </div>
+
+    <!-- 1. UPLOAD STATE (Initial Server Rendered DOM) -->
+    <div id="video-state-upload" class="p-4 sm:p-10 text-center space-y-6">
+      
+      <!-- Speed Benefit Sub-header -->
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-xs font-mono text-[#4d4d4d] dark:text-[#a1a1a1] max-w-full">
+        <span class="shrink-0">⚡ Fast</span>
+        <span class="text-[#888888] dark:text-[#666666] shrink-0">•</span>
+        <span class="text-[#888888] dark:text-[#a1a1a1] font-sans truncate">No upload. Processed on device.</span>
+      </div>
+
+      <div 
+        id="video-drop-zone" 
+        class="border-2 border-dashed border-[#a1a1a1]/40 dark:border-[#404040] hover:border-[#0070f3] dark:hover:border-[#0070f3] bg-[#fafafa] dark:bg-[#171717] hover:bg-[#0070f3]/5 rounded-xl p-6 sm:p-12 transition-all duration-200 cursor-pointer group flex flex-col items-center justify-center space-y-4 max-w-full"
+      >
+        <input 
+          type="file" 
+          id="video-file-input" 
+          class="hidden" 
+          accept=".mp4,.mov,video/mp4,video/quicktime" 
+        />
+        
+        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white dark:bg-[#262626] border border-[#ebebeb] dark:border-[#333333] shadow-sm flex items-center justify-center text-[#171717] dark:text-white group-hover:scale-110 group-hover:border-[#0070f3] group-hover:text-[#0070f3] transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2"/>
+            <path d="m9 8 6 4-6 4Z"/>
+          </svg>
+        </div>
+
+        <div class="space-y-1 max-w-full px-2">
+          <p class="text-sm sm:text-lg font-semibold text-[#171717] dark:text-white">
+            Drag and drop your video here, or <span class="text-[#0070f3] underline underline-offset-2">browse</span>
+          </p>
+          <p class="text-[11px] sm:text-xs text-[#888888] dark:text-[#a1a1a1] font-mono leading-relaxed">
+            MP4 &amp; MOV • Large files supported on capable devices
+          </p>
+        </div>
+
+        <!-- Primary CTA Button -->
+        <button 
+          type="button" 
+          id="btn-choose-video"
+          class="px-6 py-3 rounded-full bg-[#171717] dark:bg-white text-white dark:text-[#171717] font-medium text-xs sm:text-sm hover:bg-[#333333] dark:hover:bg-[#e5e5e5] active:scale-98 transition-all shadow-md flex items-center gap-2"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+          Choose Video
+        </button>
+      </div>
+
+      <!-- Format Redirection / User-friendly Error Alert Banner -->
+      <div id="video-error-banner" class="hidden p-4 sm:p-5 rounded-xl border transition-all text-left">
+        <span id="video-error-message"></span>
+      </div>
+
+      <!-- Quick Tool Switcher Links -->
+      <div class="flex flex-wrap items-center justify-center gap-2 pt-1 text-xs font-mono text-[#888888] dark:text-[#a1a1a1]">
+        <span>Looking for another format?</span>
+        <a href="/" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-[#0070f3] hover:underline">
+          📷 Image Tool
+        </a>
+        <a href="/pdf-metadata-remover" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-[#0070f3] hover:underline">
+          📄 PDF Remover
+        </a>
+      </div>
+
+      <!-- Benefits Row -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-left">
+        <div class="p-3 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] space-y-0.5">
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-[#171717] dark:text-white">
+            <span>🔒</span> Private
+          </div>
+          <p class="text-[11px] text-[#888888] dark:text-[#a1a1a1] font-sans leading-tight">Your video stays on your device</p>
+        </div>
+
+        <div class="p-3 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] space-y-0.5">
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-[#171717] dark:text-white">
+            <span>⚡</span> Fast
+          </div>
+          <p class="text-[11px] text-[#888888] dark:text-[#a1a1a1] font-sans leading-tight">No upload or server processing</p>
+        </div>
+
+        <div class="p-3 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] space-y-0.5">
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-[#171717] dark:text-white">
+            <span>✓</span> Verified
+          </div>
+          <p class="text-[11px] text-[#888888] dark:text-[#a1a1a1] font-sans leading-tight">The cleaned video is rescanned after removal</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 2. SCAN STATE (Populated dynamically on video selection) -->
+    <div id="video-state-scan" class="hidden p-4 sm:p-8 space-y-6"></div>
+
+    <!-- 3. VERIFICATION & DOWNLOAD STATE (Populated dynamically after metadata removal) -->
+    <div id="video-state-verify" class="hidden p-4 sm:p-8 space-y-6"></div>
+
+  </div>
+</section>
+
+<!-- Interactive Client-side Script for Video Processor -->
+<script>
+  import { scanVideoMetadata, removeVideoMetadata, verifyCleanVideo, LARGE_VIDEO_WARN_THRESHOLD_MB } from '../utils/videoMetadataEngine.js';
+
+  let currentVideoFile = null;
+  let scanVideoResults = null;
+  let cleanedVideoBlob = null;
+  let currentCleanUrl = null;
+
+  // DOM Elements
+  const videoDropZone = document.getElementById('video-drop-zone');
+  const videoFileInput = document.getElementById('video-file-input');
+  const btnChooseVideo = document.getElementById('btn-choose-video');
+  const videoStateUpload = document.getElementById('video-state-upload');
+  const videoStateScan = document.getElementById('video-state-scan');
+  const videoStateVerify = document.getElementById('video-state-verify');
+
+  const videoErrorBanner = document.getElementById('video-error-banner');
+  const videoErrorMessage = document.getElementById('video-error-message');
+
+  const videoStep1Badge = document.getElementById('video-step-1-badge');
+  const videoStep2Badge = document.getElementById('video-step-2-badge');
+  const videoStep3Badge = document.getElementById('video-step-3-badge');
+  const videoStep4Badge = document.getElementById('video-step-4-badge');
+
+  // Trigger File Picker
+  btnChooseVideo?.addEventListener('click', () => videoFileInput.click());
+  videoDropZone?.addEventListener('click', (e) => {
+    if (e.target !== btnChooseVideo) videoFileInput.click();
+  });
+
+  // Drag & Drop Handlers
+  videoDropZone?.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    videoDropZone.classList.add('border-[#0070f3]', 'bg-[#0070f3]/5');
+  });
+  videoDropZone?.addEventListener('dragleave', () => {
+    videoDropZone.classList.remove('border-[#0070f3]', 'bg-[#0070f3]/5');
+  });
+  videoDropZone?.addEventListener('drop', (e) => {
+    e.preventDefault();
+    videoDropZone.classList.remove('border-[#0070f3]', 'bg-[#0070f3]/5');
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleVideoSelected(e.dataTransfer.files[0]);
+    }
+  });
+
+  videoFileInput?.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files[0]) {
+      handleVideoSelected(e.target.files[0]);
+    }
+  });
+
+  function showVideoRedirectBanner(type, fileName, targetUrl, targetName, icon) {
+    if (!videoErrorBanner) return;
+    videoErrorBanner.className = 'p-4 sm:p-5 rounded-xl bg-[#0070f3]/10 border border-[#0070f3] text-[#171717] dark:text-white text-xs font-mono text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4';
+    videoErrorBanner.innerHTML = `
+      <div class="flex items-start gap-3 min-w-0">
+        <span class="text-2xl shrink-0">${icon}</span>
+        <div class="space-y-1 min-w-0">
+          <h4 class="font-bold text-sm text-[#0070f3]">${escapeHtml(targetName)} Detected</h4>
+          <p class="text-[#4d4d4d] dark:text-[#a1a1a1] font-sans text-xs leading-relaxed">
+            You selected <strong class="font-mono text-[#171717] dark:text-white truncate max-w-[200px] inline-block align-bottom">${escapeHtml(fileName)}</strong>. To remove metadata from ${type === 'pdf' ? 'PDF documents' : 'images'}, use our dedicated tool.
+          </p>
+        </div>
+      </div>
+      <a href="${targetUrl}" class="px-5 py-2.5 rounded-full bg-[#0070f3] hover:bg-[#0761d1] text-white font-semibold font-sans text-xs shadow-md transition-all whitespace-nowrap shrink-0 w-full sm:w-auto text-center">
+        Go to ${escapeHtml(targetName)} →
+      </a>
+    `;
+    videoErrorBanner.classList.remove('hidden');
+  }
+
+  // Video File Selection Handler
+  async function handleVideoSelected(file) {
+    if (videoErrorBanner) videoErrorBanner.classList.add('hidden');
+
+    const ext = file.name.split('.').pop().toLowerCase();
+    const isPdf = ext === 'pdf' || file.type === 'application/pdf';
+    const isImage = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'heic'].includes(ext) || file.type.startsWith('image/');
+
+    if (isPdf) {
+      showVideoRedirectBanner('pdf', file.name, '/pdf-metadata-remover', 'PDF Metadata Remover', '📄');
+      return;
+    }
+    if (isImage) {
+      showVideoRedirectBanner('image', file.name, '/', 'Image Metadata Remover', '📷');
+      return;
+    }
+
+    currentVideoFile = file;
+
+    // Scan metadata
+    scanVideoResults = await scanVideoMetadata(file);
+
+    if (!scanVideoResults.success) {
+      if (videoErrorMessage) videoErrorMessage.textContent = scanVideoResults.message || '⚠️ Error reading video file.';
+      videoErrorBanner.className = 'p-4 rounded-xl bg-[#f7d4d6] dark:bg-[#3f1315] border border-[#ee0000] text-[#c50000] dark:text-[#f87171] text-xs font-mono flex items-center gap-3 text-left';
+      if (videoErrorBanner) videoErrorBanner.classList.remove('hidden');
+      return;
+    }
+
+    updateVideoStepBadges(2);
+
+    // Render video scan state dynamically using DOM methods
+    renderVideoScanState(file, scanVideoResults);
+
+    // Switch View
+    videoStateUpload.classList.add('hidden');
+    videoStateScan.classList.remove('hidden');
+    videoStateVerify.classList.add('hidden');
+  }
+
+  // Dynamically render Video Scan State HTML via pure DOM nodes
+  function renderVideoScanState(file, results) {
+    videoStateScan.innerHTML = '';
+
+    const sizeMbNumber = file.size / (1024 * 1024);
+    const sizeMb = sizeMbNumber.toFixed(1);
+    const ext = file.name.split('.').pop().toUpperCase();
+    const isLargeFile = sizeMbNumber >= LARGE_VIDEO_WARN_THRESHOLD_MB;
+
+    // Header card
+    const headerDiv = document.createElement('div');
+    headerDiv.className = 'flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626]';
+
+    const headerLeft = document.createElement('div');
+    headerLeft.className = 'flex items-center gap-3 overflow-hidden max-w-full';
+
+    const badgeDiv = document.createElement('div');
+    badgeDiv.className = 'w-10 h-10 sm:w-12 sm:h-12 rounded-lg border border-[#ebebeb] dark:border-[#333333] bg-[#0070f3]/10 text-[#0070f3] flex-shrink-0 flex items-center justify-center font-bold text-xs font-mono';
+    badgeDiv.textContent = ext;
+
+    const infoDiv = document.createElement('div');
+    infoDiv.className = 'min-w-0';
+
+    const titleH3 = document.createElement('h3');
+    titleH3.className = 'text-xs sm:text-sm font-semibold text-[#171717] dark:text-white truncate';
+    titleH3.textContent = file.name;
+
+    const metaP = document.createElement('p');
+    metaP.className = 'text-[11px] sm:text-xs font-mono text-[#888888] dark:text-[#a1a1a1] mt-0.5';
+    metaP.textContent = `Format: ${ext} • Size: ${sizeMb} MB`;
+
+    infoDiv.appendChild(titleH3);
+    infoDiv.appendChild(metaP);
+
+    headerLeft.appendChild(badgeDiv);
+    headerLeft.appendChild(infoDiv);
+
+    const changeBtn = document.createElement('button');
+    changeBtn.className = 'text-xs font-medium text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white px-3 py-1.5 rounded-full border border-[#ebebeb] dark:border-[#333333] bg-white dark:bg-[#111111] hover:bg-[#fafafa] dark:hover:bg-[#262626] transition-colors shrink-0';
+    changeBtn.textContent = 'Change Video';
+    changeBtn.addEventListener('click', resetVideoToUploadState);
+
+    headerDiv.appendChild(headerLeft);
+    headerDiv.appendChild(changeBtn);
+    videoStateScan.appendChild(headerDiv);
+
+    // Large File Warning Banner (if > 300MB)
+    if (isLargeFile) {
+      const largeWarnDiv = document.createElement('div');
+      largeWarnDiv.className = 'p-4 rounded-xl bg-[#e0f2fe] dark:bg-[#075985]/30 border border-[#0284c7] text-[#0369a1] dark:text-[#38bdf8] flex items-start gap-3 text-xs font-mono';
+      largeWarnDiv.innerHTML = `
+        <span class="text-base shrink-0">🐘</span>
+        <div class="space-y-1">
+          <h4 class="text-sm font-semibold">Large video file detected (${sizeMb} MB)</h4>
+          <p class="leading-relaxed opacity-90">Processing relies on your device's browser memory and stream copy speed. Please keep this browser tab open during processing.</p>
+        </div>
+      `;
+      videoStateScan.appendChild(largeWarnDiv);
+    }
+
+    // Privacy Location Warning
+    if (results.hasLocation) {
+      const warnDiv = document.createElement('div');
+      warnDiv.className = 'p-4 rounded-xl bg-[#ffefcf] dark:bg-[#2e1e05] border border-[#f5a623] text-[#ab570a] dark:text-[#fbbf24] flex items-start gap-3';
+      warnDiv.innerHTML = `
+        <span class="text-lg shrink-0">⚠️</span>
+        <div class="space-y-1">
+          <h4 class="text-sm font-semibold">Location data detected</h4>
+          <p class="text-xs leading-relaxed opacity-90">This video may contain information about where it was recorded.</p>
+        </div>
+      `;
+      videoStateScan.appendChild(warnDiv);
+    }
+
+    // Render Privacy vs Technical Tables
+    const privacyItems = results.privacyMetadata || [];
+    const technicalItems = results.technicalMetadata || [];
+
+    if (!results.hasMetadata) {
+      const cleanBanner = document.createElement('div');
+      cleanBanner.className = 'p-4 rounded-xl bg-[#d1fae5] dark:bg-[#064e3b] border border-[#10b981] text-[#065f46] dark:text-[#a7f3d0] text-xs font-mono flex items-center gap-2';
+      cleanBanner.textContent = '✓ No removable container metadata detected in this video file.';
+      videoStateScan.appendChild(cleanBanner);
+    } else {
+      const tableWrapper = document.createElement('div');
+      tableWrapper.className = 'space-y-6';
+
+      // 1. PRIVACY-SENSITIVE METADATA SECTION
+      const privacyHeader = document.createElement('div');
+      privacyHeader.className = 'space-y-3';
+      
+      const pTitleRow = document.createElement('div');
+      pTitleRow.className = 'flex items-center justify-between';
+      
+      const pTitle = document.createElement('h4');
+      pTitle.className = 'text-xs font-mono uppercase tracking-wider text-[#171717] dark:text-white font-bold flex items-center gap-2';
+      pTitle.innerHTML = `<span class="w-2 h-2 rounded-full bg-[#ee0000]"></span> Privacy-Sensitive Metadata`;
+
+      const pBadge = document.createElement('span');
+      pBadge.className = 'px-2.5 py-0.5 rounded-full bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-xs font-mono text-[#171717] dark:text-white font-semibold';
+      pBadge.textContent = `${privacyItems.length} privacy fields`;
+
+      pTitleRow.appendChild(pTitle);
+      pTitleRow.appendChild(pBadge);
+      privacyHeader.appendChild(pTitleRow);
+
+      if (privacyItems.length === 0) {
+        const noPrivacyBanner = document.createElement('div');
+        noPrivacyBanner.className = 'p-3.5 rounded-xl bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-[#888888] dark:text-[#a1a1a1] text-xs font-mono';
+        noPrivacyBanner.textContent = '✓ No privacy-sensitive metadata (GPS, Device, Camera, Recording time) detected.';
+        privacyHeader.appendChild(noPrivacyBanner);
+      } else {
+        const pTableBox = document.createElement('div');
+        pTableBox.className = 'border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-x-auto bg-white dark:bg-[#111111] max-w-full';
+
+        const pTable = document.createElement('table');
+        pTable.className = 'w-full text-left text-xs font-mono min-w-full';
+        pTable.innerHTML = `
+          <thead class="bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[#888888] dark:text-[#a1a1a1]">
+            <tr>
+              <th class="px-3 py-2.5 font-medium">Privacy Field</th>
+              <th class="px-3 py-2.5 font-medium hidden sm:table-cell">Category</th>
+              <th class="px-3 py-2.5 font-medium">Detected Value</th>
+              <th class="px-3 py-2.5 font-medium text-right">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#ebebeb] dark:divide-[#262626] text-[#171717] dark:text-white">
+            ${privacyItems.map(item => `
+              <tr class="hover:bg-[#fafafa] dark:hover:bg-[#171717] transition-colors">
+                <td class="px-3 py-2.5 text-[#4d4d4d] dark:text-[#a1a1a1] font-semibold break-words">${escapeHtml(item.name)}</td>
+                <td class="px-3 py-2.5 text-[#888888] hidden sm:table-cell">${escapeHtml(item.category || 'Privacy')}</td>
+                <td class="px-3 py-2.5 text-[#171717] dark:text-white break-all max-w-[150px] sm:max-w-none">${escapeHtml(item.value)}</td>
+                <td class="px-3 py-2.5 text-right font-medium text-[#10b981] whitespace-nowrap">Removable ✓</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        `;
+        pTableBox.appendChild(pTable);
+        privacyHeader.appendChild(pTableBox);
+      }
+      tableWrapper.appendChild(privacyHeader);
+
+      // 2. TECHNICAL CONTAINER METADATA SECTION
+      if (technicalItems.length > 0) {
+        const techHeader = document.createElement('div');
+        techHeader.className = 'space-y-3 pt-2';
+
+        const tTitleRow = document.createElement('div');
+        tTitleRow.className = 'flex items-center justify-between';
+
+        const tTitle = document.createElement('h4');
+        tTitle.className = 'text-xs font-mono uppercase tracking-wider text-[#888888] dark:text-[#a1a1a1] font-semibold flex items-center gap-2';
+        tTitle.innerHTML = `<span class="w-2 h-2 rounded-full bg-[#0070f3]"></span> Technical Container Metadata`;
+
+        const tBadge = document.createElement('span');
+        tBadge.className = 'px-2.5 py-0.5 rounded-full bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] text-xs font-mono text-[#888888] dark:text-[#a1a1a1] font-semibold';
+        tBadge.textContent = `${technicalItems.length} technical fields`;
+
+        tTitleRow.appendChild(tTitle);
+        tTitleRow.appendChild(tBadge);
+        techHeader.appendChild(tTitleRow);
+
+        const tTableBox = document.createElement('div');
+        tTableBox.className = 'border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-x-auto bg-white dark:bg-[#111111] max-w-full';
+
+        const tTable = document.createElement('table');
+        tTable.className = 'w-full text-left text-xs font-mono min-w-full';
+        tTable.innerHTML = `
+          <thead class="bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[#888888] dark:text-[#a1a1a1]">
+            <tr>
+              <th class="px-3 py-2.5 font-medium">Technical Field</th>
+              <th class="px-3 py-2.5 font-medium">Value</th>
+              <th class="px-3 py-2.5 font-medium text-right">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#ebebeb] dark:divide-[#262626] text-[#171717] dark:text-white">
+            ${technicalItems.map(item => `
+              <tr class="hover:bg-[#fafafa] dark:hover:bg-[#171717] transition-colors">
+                <td class="px-3 py-2.5 text-[#4d4d4d] dark:text-[#a1a1a1] font-semibold break-words">${escapeHtml(item.name)}</td>
+                <td class="px-3 py-2.5 text-[#171717] dark:text-white break-all max-w-[150px] sm:max-w-none">${escapeHtml(item.value)}</td>
+                <td class="px-3 py-2.5 text-right font-medium text-[#10b981] whitespace-nowrap">Removable ✓</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        `;
+        tTableBox.appendChild(tTable);
+        techHeader.appendChild(tTableBox);
+        tableWrapper.appendChild(techHeader);
+      }
+
+      videoStateScan.appendChild(tableWrapper);
+    }
+
+    // Action Row
+    const actionRow = document.createElement('div');
+    actionRow.className = 'pt-4 border-t border-[#ebebeb] dark:border-[#262626] flex items-center justify-between gap-3 flex-col sm:flex-row';
+    
+    const noteSpan = document.createElement('span');
+    noteSpan.className = 'text-xs text-[#888888] dark:text-[#a1a1a1] font-mono text-center sm:text-left';
+    noteSpan.textContent = 'Removes supported video metadata without re-encoding the media streams.';
+
+    const removeBtn = document.createElement('button');
+    removeBtn.id = 'btn-remove-video-metadata';
+    removeBtn.className = 'w-full sm:w-auto px-8 py-3 rounded-full bg-[#171717] dark:bg-white hover:bg-[#333333] dark:hover:bg-[#e5e5e5] text-white dark:text-[#171717] font-semibold text-sm shadow-md active:scale-98 transition-all flex items-center justify-center gap-2';
+    removeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg> Remove Metadata`;
+    removeBtn.addEventListener('click', handleRemoveVideoMetadata);
+
+    actionRow.appendChild(noteSpan);
+    actionRow.appendChild(removeBtn);
+    videoStateScan.appendChild(actionRow);
+  }
+
+  // Helper escape HTML
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  // Remove Video Metadata Action
+  async function handleRemoveVideoMetadata() {
+    if (!currentVideoFile) return;
+
+    const btnRemoveVideoMetadata = document.getElementById('btn-remove-video-metadata');
+    if (btnRemoveVideoMetadata) {
+      btnRemoveVideoMetadata.disabled = true;
+      btnRemoveVideoMetadata.innerHTML = `
+        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Preparing video...
+      `;
+    }
+
+    updateVideoStepBadges(3);
+    const startTime = performance.now();
+
+    try {
+      cleanedVideoBlob = await removeVideoMetadata(currentVideoFile, (progress) => {
+        if (btnRemoveVideoMetadata) {
+          const pct = Math.min(100, Math.round(progress * 100));
+          btnRemoveVideoMetadata.innerHTML = `
+            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            Removing metadata (${pct}%)...
+          `;
+        }
+      });
+
+      if (btnRemoveVideoMetadata) {
+        btnRemoveVideoMetadata.innerHTML = `Verifying cleaned video...`;
+      }
+
+      const verifyReport = await verifyCleanVideo(cleanedVideoBlob, scanVideoResults.metadataList);
+      const endTime = performance.now();
+      const durationSeconds = ((endTime - startTime) / 1000).toFixed(2);
+
+      if (currentCleanUrl) URL.revokeObjectURL(currentCleanUrl);
+      currentCleanUrl = URL.createObjectURL(cleanedVideoBlob);
+
+      const parts = currentVideoFile.name.split('.');
+      const ext = parts.pop();
+      const cleanFileName = `${parts.join('.')}_clean.${ext}`;
+
+      renderVideoVerifyState(verifyReport, durationSeconds, currentCleanUrl, cleanFileName);
+
+      updateVideoStepBadges(4);
+      videoStateScan.classList.add('hidden');
+      videoStateVerify.classList.remove('hidden');
+    } catch (err) {
+      if (videoErrorMessage) videoErrorMessage.textContent = err.message || '⚠️ Failed to process video file.';
+      if (videoErrorBanner) videoErrorBanner.classList.remove('hidden');
+      if (btnRemoveVideoMetadata) {
+        btnRemoveVideoMetadata.disabled = false;
+        btnRemoveVideoMetadata.innerHTML = `Remove Metadata`;
+      }
+    }
+  }
+
+  // Dynamically render Video Verify State HTML
+  function renderVideoVerifyState(report, durationSeconds, cleanUrl, cleanFileName) {
+    videoStateVerify.innerHTML = '';
+
+    const isAllClean = report.verified && !report.hasRemaining;
+
+    const banner = document.createElement('div');
+    banner.className = `p-4 rounded-xl ${isAllClean ? 'bg-[#d1fae5] dark:bg-[#064e3b] border border-[#10b981] text-[#065f46] dark:text-[#a7f3d0]' : 'bg-[#ffefcf] dark:bg-[#2e1e05] border border-[#f5a623] text-[#ab570a] dark:text-[#fbbf24]'} flex items-start sm:items-center justify-between gap-3 flex-col sm:flex-row`;
+    
+    banner.innerHTML = `
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full ${isAllClean ? 'bg-[#10b981]' : 'bg-[#f5a623]'} text-white flex items-center justify-center font-bold flex-shrink-0">
+          ${isAllClean ? '✓' : '⚠️'}
+        </div>
+        <div>
+          <h4 class="text-sm font-semibold">${isAllClean ? 'Video Metadata Removed & Verified' : 'Some metadata could not be removed'}</h4>
+          <p class="text-xs opacity-90 mt-0.5 font-mono">
+            ${isAllClean 
+              ? 'All supported removable metadata was removed.' 
+              : `Rescanned: ${report.removedCount} tags removed. ${report.remainingItems.length} tags remain in file.`}
+          </p>
+        </div>
+      </div>
+      <div class="px-3 py-1.5 rounded-lg bg-white/70 dark:bg-black/40 border border-current/30 text-xs font-mono font-medium self-start sm:self-auto whitespace-nowrap">
+        ⚡ Processing time: ${durationSeconds}s
+      </div>
+    `;
+
+    const auditContainer = document.createElement('div');
+    auditContainer.className = 'border border-[#ebebeb] dark:border-[#262626] rounded-xl p-4 sm:p-5 bg-[#fafafa] dark:bg-[#171717] space-y-4 max-w-full';
+    
+    const auditHeader = document.createElement('div');
+    auditHeader.className = 'flex items-center justify-between gap-2';
+    
+    const auditTitle = document.createElement('h4');
+    auditTitle.className = 'text-xs font-mono uppercase tracking-wider text-[#888888] dark:text-[#a1a1a1] truncate';
+    auditTitle.textContent = 'Verification Audit Report';
+
+    const pill = document.createElement('span');
+    pill.className = `px-2.5 py-1 rounded-full ${isAllClean ? 'bg-[#10b981]' : 'bg-[#f5a623]'} text-white text-xs font-mono font-bold shrink-0`;
+    pill.textContent = `${report.removedCount} / ${report.totalOriginal} fields removed`;
+
+    auditHeader.appendChild(auditTitle);
+    auditHeader.appendChild(pill);
+    auditContainer.appendChild(auditHeader);
+
+    const listGrid = document.createElement('div');
+    listGrid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono';
+    
+    if (report.verificationItems.length === 0) {
+      listGrid.innerHTML = `<div class="col-span-2 p-3 rounded-lg bg-white dark:bg-[#111111] border border-[#ebebeb] dark:border-[#262626] text-[#10b981] font-semibold flex items-center gap-2">✓ No removable container metadata detected in this video file.</div>`;
+    } else {
+      report.verificationItems.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'flex items-center justify-between p-3 rounded-lg bg-white dark:bg-[#111111] border border-[#ebebeb] dark:border-[#262626]';
+        itemDiv.innerHTML = `
+          <div class="min-w-0 pr-2">
+            <span class="text-[#4d4d4d] dark:text-[#a1a1a1] block font-semibold truncate">${escapeHtml(item.name)}</span>
+            <span class="text-[10px] text-[#888888] font-mono">${escapeHtml(item.category || 'Metadata')}</span>
+          </div>
+          <span class="${item.removed ? 'text-[#10b981]' : 'text-[#ee0000]'} font-semibold flex items-center gap-1 shrink-0">
+            ${item.removed ? '✓ Removed' : '⚠️ Remaining'}
+          </span>
+        `;
+        listGrid.appendChild(itemDiv);
+      });
+    }
+    auditContainer.appendChild(listGrid);
+
+    const actionRow = document.createElement('div');
+    actionRow.className = 'pt-4 border-t border-[#ebebeb] dark:border-[#262626] flex flex-col sm:flex-row items-center justify-between gap-4';
+
+    const anotherBtn = document.createElement('button');
+    anotherBtn.className = 'w-full sm:w-auto px-6 py-3 rounded-full border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#171717] hover:bg-[#fafafa] dark:hover:bg-[#262626] text-[#171717] dark:text-white font-medium text-xs transition-colors';
+    anotherBtn.textContent = 'Process Another Video';
+    anotherBtn.addEventListener('click', resetVideoToUploadState);
+
+    const downloadLink = document.createElement('a');
+    downloadLink.href = cleanUrl;
+    downloadLink.download = cleanFileName;
+    downloadLink.className = 'w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#0070f3] hover:bg-[#0761d1] text-white font-semibold text-sm shadow-md active:scale-98 transition-all flex items-center justify-center gap-2 text-center';
+    downloadLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download Clean Video`;
+
+    actionRow.appendChild(anotherBtn);
+    actionRow.appendChild(downloadLink);
+
+    videoStateVerify.appendChild(banner);
+    videoStateVerify.appendChild(auditContainer);
+    videoStateVerify.appendChild(actionRow);
+  }
+
+  // Reset UI & Revoke Memory Object URLs
+  function resetVideoToUploadState() {
+    if (currentCleanUrl) {
+      URL.revokeObjectURL(currentCleanUrl);
+      currentCleanUrl = null;
+    }
+
+    currentVideoFile = null;
+    scanVideoResults = null;
+    cleanedVideoBlob = null;
+    videoFileInput.value = '';
+
+    videoStateScan.innerHTML = '';
+    videoStateVerify.innerHTML = '';
+
+    updateVideoStepBadges(1);
+    if (videoErrorBanner) videoErrorBanner.classList.add('hidden');
+    videoStateUpload.classList.remove('hidden');
+    videoStateScan.classList.add('hidden');
+    videoStateVerify.classList.add('hidden');
+  }
+
+  // Update step progress badges UI
+  function updateVideoStepBadges(stepNumber) {
+    [videoStep1Badge, videoStep2Badge, videoStep3Badge, videoStep4Badge].forEach((badge, idx) => {
+      if (!badge) return;
+      const num = idx + 1;
+      const circle = badge.querySelector('span');
+      if (num <= stepNumber) {
+        badge.className = 'flex items-center gap-1.5 text-[#171717] dark:text-white font-semibold';
+        if (circle) circle.className = 'w-5 h-5 rounded-full bg-[#171717] dark:bg-white text-white dark:text-[#171717] flex items-center justify-center text-[10px]';
+      } else {
+        badge.className = 'flex items-center gap-1.5 text-[#888888]';
+        if (circle) circle.className = 'w-5 h-5 rounded-full bg-[#f5f5f5] dark:bg-[#262626] text-[#888888] flex items-center justify-center text-[10px]';
+      }
+    });
+  }
+</script>

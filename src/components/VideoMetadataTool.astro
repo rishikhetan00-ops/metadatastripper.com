@@ -541,25 +541,49 @@
   }
 
   // Dynamically render Video Verify State HTML
-  function renderVideoVerifyState(report, durationSeconds, cleanUrl, cleanFileName) {
+  function renderVideoVerifyState(rawReport, durationSeconds, cleanUrl, cleanFileName) {
     videoStateVerify.innerHTML = '';
 
-    const isAllClean = report.verified && !report.hasRemaining;
+    const report = {
+      totalOriginal: Math.max(0, Number(rawReport?.totalOriginal) || 0),
+      removedCount: Math.max(0, Number(rawReport?.removedCount) || 0),
+      remainingCount: Math.max(0, Number(rawReport?.remainingCount) || 0),
+      hasRemaining: Boolean(rawReport?.hasRemaining),
+      verified: Boolean(rawReport?.verified),
+      verificationItems: Array.isArray(rawReport?.verificationItems) ? rawReport.verificationItems : [],
+      remainingItems: Array.isArray(rawReport?.remainingItems) ? rawReport.remainingItems : []
+    };
+
+    const isZeroMetadata = report.totalOriginal === 0;
+    const isAllClean = !isZeroMetadata && (report.verified || report.remainingCount === 0);
+    const isPartial = !isZeroMetadata && report.remainingCount > 0;
+
+    let bannerTitle = 'Video Metadata Removed & Verified';
+    let bannerDesc = 'All supported removable metadata was stripped.';
+    let pillText = `${report.totalOriginal} / ${report.totalOriginal} fields removed`;
+
+    if (isZeroMetadata) {
+      bannerTitle = 'No Removable Metadata Detected';
+      bannerDesc = 'This video file contains no removable container metadata fields.';
+      pillText = 'No Removable Metadata';
+    } else if (isPartial) {
+      bannerTitle = 'Partial Metadata Removed';
+      bannerDesc = `${report.remainingCount} metadata field(s) remain in the output file.`;
+      pillText = `${report.removedCount} / ${report.totalOriginal} fields removed`;
+    }
 
     const banner = document.createElement('div');
-    banner.className = `p-4 rounded-xl ${isAllClean ? 'bg-[#d1fae5] dark:bg-[#064e3b] border border-[#10b981] text-[#065f46] dark:text-[#a7f3d0]' : 'bg-[#ffefcf] dark:bg-[#2e1e05] border border-[#f5a623] text-[#ab570a] dark:text-[#fbbf24]'} flex items-start sm:items-center justify-between gap-3 flex-col sm:flex-row`;
+    banner.className = `p-4 rounded-xl ${isZeroMetadata || isAllClean ? 'bg-[#d1fae5] dark:bg-[#064e3b] border border-[#10b981] text-[#065f46] dark:text-[#a7f3d0]' : 'bg-[#ffefcf] dark:bg-[#2e1e05] border border-[#f5a623] text-[#ab570a] dark:text-[#fbbf24]'} flex items-start sm:items-center justify-between gap-3 flex-col sm:flex-row`;
     
     banner.innerHTML = `
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-full ${isAllClean ? 'bg-[#10b981]' : 'bg-[#f5a623]'} text-white flex items-center justify-center font-bold flex-shrink-0">
-          ${isAllClean ? '✓' : '⚠️'}
+        <div class="w-8 h-8 rounded-full ${isZeroMetadata || isAllClean ? 'bg-[#10b981]' : 'bg-[#f5a623]'} text-white flex items-center justify-center font-bold flex-shrink-0">
+          ${isZeroMetadata || isAllClean ? '✓' : '⚠️'}
         </div>
         <div>
-          <h4 class="text-sm font-semibold">${isAllClean ? 'Video Metadata Removed & Verified' : 'Some metadata could not be removed'}</h4>
+          <h4 class="text-sm font-semibold">${escapeHtml(bannerTitle)}</h4>
           <p class="text-xs opacity-90 mt-0.5 font-mono">
-            ${isAllClean 
-              ? 'All supported removable metadata was removed.' 
-              : `Rescanned: ${report.removedCount} tags removed. ${report.remainingItems.length} tags remain in file.`}
+            ${escapeHtml(bannerDesc)}
           </p>
         </div>
       </div>
@@ -579,8 +603,8 @@
     auditTitle.textContent = 'Verification Audit Report';
 
     const pill = document.createElement('span');
-    pill.className = `px-2.5 py-1 rounded-full ${isAllClean ? 'bg-[#10b981]' : 'bg-[#f5a623]'} text-white text-xs font-mono font-bold shrink-0`;
-    pill.textContent = `${report.removedCount} / ${report.totalOriginal} fields removed`;
+    pill.className = `px-2.5 py-1 rounded-full ${isZeroMetadata || isAllClean ? 'bg-[#10b981]' : 'bg-[#f5a623]'} text-white text-xs font-mono font-bold shrink-0`;
+    pill.textContent = pillText;
 
     auditHeader.appendChild(auditTitle);
     auditHeader.appendChild(pill);
@@ -589,7 +613,7 @@
     const listGrid = document.createElement('div');
     listGrid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono';
     
-    if (report.verificationItems.length === 0) {
+    if (isZeroMetadata || report.verificationItems.length === 0) {
       listGrid.innerHTML = `<div class="col-span-2 p-3 rounded-lg bg-white dark:bg-[#111111] border border-[#ebebeb] dark:border-[#262626] text-[#10b981] font-semibold flex items-center gap-2">✓ No removable container metadata detected in this video file.</div>`;
     } else {
       report.verificationItems.forEach(item => {

@@ -384,17 +384,44 @@
   }
 
   // Dynamically render PDF Verify State HTML
-  function renderPdfVerifyState(report, durationSeconds, cleanUrl, cleanFileName) {
+  function renderPdfVerifyState(rawReport, durationSeconds, cleanUrl, cleanFileName) {
+    const report = {
+      totalOriginal: Math.max(0, Number(rawReport?.totalOriginal) || 0),
+      removedCount: Math.max(0, Number(rawReport?.removedCount) || 0),
+      remainingCount: Math.max(0, Number(rawReport?.remainingCount) || 0),
+      hasRemaining: Boolean(rawReport?.hasRemaining),
+      verified: Boolean(rawReport?.verified),
+      verificationItems: Array.isArray(rawReport?.verificationItems) ? rawReport.verificationItems : []
+    };
+
+    const isZeroMetadata = report.totalOriginal === 0;
+    const isAllClean = !isZeroMetadata && (report.verified || report.remainingCount === 0);
+    const isPartial = !isZeroMetadata && report.remainingCount > 0;
+
+    let bannerTitle = 'PDF Metadata Removed & Verified';
+    let bannerDesc = 'Rescanned clean file: All document metadata cleared.';
+    let pillText = `${report.totalOriginal} / ${report.totalOriginal} Fields Cleared`;
+
+    if (isZeroMetadata) {
+      bannerTitle = 'No Removable Metadata Detected';
+      bannerDesc = 'This PDF document contains no standard removable metadata fields.';
+      pillText = 'No Removable Metadata';
+    } else if (isPartial) {
+      bannerTitle = 'Partial Metadata Removed';
+      bannerDesc = `${report.remainingCount} metadata field(s) remain in the output PDF file.`;
+      pillText = `${report.removedCount} / ${report.totalOriginal} Fields Cleared`;
+    }
+
     pdfStateVerify.innerHTML = `
-      <div class="p-4 rounded-xl ${report.verified ? 'bg-[#d1fae5] dark:bg-[#064e3b] border border-[#10b981] text-[#065f46] dark:text-[#a7f3d0]' : 'bg-[#ffefcf] dark:bg-[#2e1e05] border border-[#f5a623] text-[#ab570a] dark:text-[#fbbf24]'} flex items-center justify-between gap-3 flex-col sm:flex-row">
+      <div class="p-4 rounded-xl ${isZeroMetadata || isAllClean ? 'bg-[#d1fae5] dark:bg-[#064e3b] border border-[#10b981] text-[#065f46] dark:text-[#a7f3d0]' : 'bg-[#ffefcf] dark:bg-[#2e1e05] border border-[#f5a623] text-[#ab570a] dark:text-[#fbbf24]'} flex items-center justify-between gap-3 flex-col sm:flex-row">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-full ${report.verified ? 'bg-[#10b981]' : 'bg-[#f5a623]'} text-white flex items-center justify-center font-bold flex-shrink-0">
-            ${report.verified ? '✓' : '⚠️'}
+          <div class="w-8 h-8 rounded-full ${isZeroMetadata || isAllClean ? 'bg-[#10b981]' : 'bg-[#f5a623]'} text-white flex items-center justify-center font-bold flex-shrink-0">
+            ${isZeroMetadata || isAllClean ? '✓' : '⚠️'}
           </div>
           <div>
-            <h4 class="text-sm font-semibold">${report.verified ? 'PDF Metadata Removed & Verified' : 'Some PDF fields remain'}</h4>
+            <h4 class="text-sm font-semibold">${escapeHtml(bannerTitle)}</h4>
             <p class="text-xs opacity-90 mt-0.5 font-mono">
-              ${report.verified ? 'Rescanned clean file: All document metadata cleared.' : 'Some internal PDF streams could not be completely cleared.'}
+              ${escapeHtml(bannerDesc)}
             </p>
           </div>
         </div>
@@ -406,13 +433,17 @@
       <div class="border border-[#ebebeb] dark:border-[#262626] rounded-xl p-5 bg-[#fafafa] dark:bg-[#171717] space-y-4">
         <div class="flex items-center justify-between">
           <h4 class="text-xs font-mono uppercase tracking-wider text-[#888888] dark:text-[#a1a1a1]">PDF Verification Audit Report</h4>
-          <span class="px-2.5 py-1 rounded-full ${report.verified ? 'bg-[#10b981]' : 'bg-[#f5a623]'} text-white text-xs font-mono font-bold">
-            ${report.removedCount} / ${report.totalOriginal} Fields Cleared
+          <span class="px-2.5 py-1 rounded-full ${isZeroMetadata || isAllClean ? 'bg-[#10b981]' : 'bg-[#f5a623]'} text-white text-xs font-mono font-bold">
+            ${pillText}
           </span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
-          ${report.verificationItems.map(item => `
+          ${isZeroMetadata || report.verificationItems.length === 0 ? `
+            <div class="col-span-2 p-3 rounded-lg bg-white dark:bg-[#111111] border border-[#ebebeb] dark:border-[#262626] text-[#10b981] font-semibold flex items-center gap-2">
+              ✓ No standard removable metadata fields detected in this PDF document.
+            </div>
+          ` : report.verificationItems.map(item => `
             <div class="flex items-center justify-between p-3 rounded-lg bg-white dark:bg-[#111111] border border-[#ebebeb] dark:border-[#262626]">
               <div>
                 <span class="text-[#4d4d4d] dark:text-[#a1a1a1] block font-semibold">${escapeHtml(item.name)}</span>

@@ -609,43 +609,52 @@ export async function removeVideoMetadata(file, onProgress = () => {}) {
 /**
  * Rescan cleaned video and verify metadata removal accurately
  */
-export async function verifyCleanVideo(cleanedBlob, originalMetadataList = []) {
+export async function verifyCleanVideo(cleanedBlob, originalInput = []) {
+  const origList = Array.isArray(originalInput) ? originalInput : (originalInput?.metadataList || []);
+  const totalOriginal = Math.max(0, origList.length);
+
   try {
     const cleanFile = new File([cleanedBlob], 'cleaned_output.mp4', { type: cleanedBlob.type });
     const rescanResult = await scanVideoMetadata(cleanFile);
+    const rescanList = rescanResult.metadataList || [];
 
-    const verificationItems = originalMetadataList.map(item => {
-      const foundInRescan = rescanResult.metadataList.find(m => m.key === item.key);
+    const verificationItems = origList.map(item => {
+      const foundInRescan = rescanList.find(m => 
+        (m.key && item.key && m.key === item.key) || 
+        (m.originalKey && item.originalKey && m.originalKey === item.originalKey && m.value === item.value)
+      );
       return {
-        category: item.category,
-        name: item.name,
-        key: item.key,
-        value: item.value,
-        isPrivacy: item.isPrivacy,
+        category: item.category || 'Metadata',
+        name: item.name || item.key || 'Metadata Tag',
+        key: item.key || '',
+        value: item.value || '',
+        isPrivacy: Boolean(item.isPrivacy),
         removed: !foundInRescan
       };
     });
 
-    const allRemoved = verificationItems.every(item => item.removed);
-    const removedCount = verificationItems.filter(item => item.removed).length;
     const remainingItems = verificationItems.filter(item => !item.removed);
+    const removedCount = totalOriginal > 0 ? verificationItems.filter(item => item.removed).length : 0;
+    const allRemoved = remainingItems.length === 0;
 
     return {
       verified: allRemoved,
+      hasRemaining: remainingItems.length > 0,
       removedCount,
-      totalOriginal: originalMetadataList.length,
+      remainingCount: remainingItems.length,
+      totalOriginal,
       verificationItems,
-      remainingItems,
-      hasRemaining: remainingItems.length > 0
+      remainingItems
     };
   } catch (err) {
     return {
       verified: false,
+      hasRemaining: totalOriginal > 0,
       removedCount: 0,
-      totalOriginal: originalMetadataList.length,
-      verificationItems: [],
-      remainingItems: originalMetadataList,
-      hasRemaining: true
+      remainingCount: totalOriginal,
+      totalOriginal,
+      verificationItems: origList.map(item => ({ ...item, removed: false })),
+      remainingItems: origList
     };
   }
 }

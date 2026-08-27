@@ -253,22 +253,32 @@ export async function removeMetadata(file) {
 /**
  * Verify cleaned file by rescanning output
  */
-export async function verifyCleanFile(cleanedBlob, originalTotalCount = 0) {
+export async function verifyCleanFile(cleanedBlob, originalInput = 0) {
   const cleanFile = new File([cleanedBlob], 'cleaned_output.jpg', { type: cleanedBlob.type });
   const rescanResult = await scanFileMetadata(cleanFile);
   
-  const remainingCount = rescanResult.totalCount;
-  const locationRemaining = rescanResult.hasLocation;
+  const remainingCount = Math.max(0, Number(rescanResult.totalCount) || 0);
+  const locationRemaining = Boolean(rescanResult.hasLocation);
+  
+  let rawOriginal = 0;
+  if (typeof originalInput === 'object' && originalInput !== null) {
+    rawOriginal = originalInput.totalCount || 0;
+  } else {
+    rawOriginal = originalInput;
+  }
+
+  const totalOriginal = Math.max(0, Number(rawOriginal) || 0);
+  const removedCount = totalOriginal > 0 ? Math.max(0, totalOriginal - remainingCount) : 0;
   const isFullyClean = remainingCount === 0 && !locationRemaining;
   
-  const removedCount = Math.max(0, originalTotalCount - remainingCount);
-
   return {
     verified: isFullyClean,
+    hasRemaining: remainingCount > 0,
     remainingCount,
     removedCount,
-    originalTotalCount,
+    totalOriginal,
     hasLocation: locationRemaining,
-    remainingCategories: rescanResult.categories
+    remainingCategories: rescanResult.categories || categorizeTags({}),
+    rescanCategories: rescanResult.categories || categorizeTags({})
   };
 }

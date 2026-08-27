@@ -172,43 +172,62 @@ export async function removePdfMetadata(file) {
 /**
  * Rescan output PDF and verify metadata removal
  */
-export async function verifyCleanPdf(cleanedBlob, originalMetadataList = []) {
-  const cleanFile = new File([cleanedBlob], 'cleaned_output.pdf', { type: 'application/pdf' });
-  const rescanResult = await scanPdfMetadata(cleanFile);
+export async function verifyCleanPdf(cleanedBlob, originalInput = []) {
+  const origList = Array.isArray(originalInput) ? originalInput : (originalInput?.metadataList || []);
+  const totalOriginal = Math.max(0, origList.length);
 
-  const verificationItems = originalMetadataList.map(item => {
-    let removed = false;
-    const foundRescanItem = rescanResult.metadataList.find(m => m.key === item.key);
+  try {
+    const cleanFile = new File([cleanedBlob], 'cleaned_output.pdf', { type: 'application/pdf' });
+    const rescanResult = await scanPdfMetadata(cleanFile);
+    const rescanList = rescanResult.metadataList || [];
 
-    if (!foundRescanItem) {
-      removed = true;
-    } else {
-      // Special check for Producer / Dates which pdf-lib might auto-inject during rescan
-      if (item.key === 'producer' && foundRescanItem.value !== item.value) {
-        removed = true;
-      } else if (item.key === 'creationDate' && foundRescanItem.value !== item.value) {
-        removed = true;
-      } else if (item.key === 'modificationDate' && foundRescanItem.value !== item.value) {
+    const verificationItems = origList.map(item => {
+      let removed = false;
+      const foundRescanItem = rescanList.find(m => m.key === item.key);
+
+      if (!foundRescanItem) {
         removed = true;
       } else {
-        removed = false;
+        if (item.key === 'producer' && foundRescanItem.value !== item.value) {
+          removed = true;
+        } else if (item.key === 'creationDate' && foundRescanItem.value !== item.value) {
+          removed = true;
+        } else if (item.key === 'modificationDate' && foundRescanItem.value !== item.value) {
+          removed = true;
+        } else {
+          removed = false;
+        }
       }
-    }
+
+      return {
+        name: item.name || item.key || 'PDF Field',
+        key: item.key || '',
+        removed
+      };
+    });
+
+    const remainingItems = verificationItems.filter(item => !item.removed);
+    const removedCount = totalOriginal > 0 ? verificationItems.filter(item => item.removed).length : 0;
+    const allSupportedRemoved = remainingItems.length === 0;
 
     return {
-      name: item.name,
-      removed
+      verified: allSupportedRemoved,
+      hasRemaining: remainingItems.length > 0,
+      removedCount,
+      remainingCount: remainingItems.length,
+      totalOriginal,
+      verificationItems,
+      remainingMetadataList: rescanList
     };
-  });
-
-  const allSupportedRemoved = verificationItems.every(item => item.removed);
-  const removedCount = verificationItems.filter(item => item.removed).length;
-
-  return {
-    verified: allSupportedRemoved,
-    removedCount,
-    totalOriginal: originalMetadataList.length,
-    verificationItems,
-    remainingMetadataList: rescanResult.metadataList
-  };
+  } catch (err) {
+    return {
+      verified: false,
+      hasRemaining: totalOriginal > 0,
+      removedCount: 0,
+      remainingCount: totalOriginal,
+      totalOriginal,
+      verificationItems: origList.map(item => ({ name: item.name || item.key, key: item.key, removed: false })),
+      remainingMetadataList: origList
+    };
+  }
 }

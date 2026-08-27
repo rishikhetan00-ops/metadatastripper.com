@@ -250,6 +250,24 @@ export async function removeMetadata(file) {
   }
 }
 
+export function isEssentialFileProperty(tagName) {
+  const nameLower = String(tagName).toLowerCase().replace(/[^a-z0-9]/g, '');
+  return (
+    nameLower.includes('imageheight') ||
+    nameLower.includes('imagewidth') ||
+    nameLower === 'height' ||
+    nameLower === 'width' ||
+    nameLower.includes('subsampling') ||
+    nameLower.includes('filetype') ||
+    nameLower.includes('mimetype') ||
+    nameLower.includes('bitspersample') ||
+    nameLower.includes('colorcomponents') ||
+    nameLower.includes('colorspace') ||
+    nameLower.includes('encodingprocess') ||
+    nameLower.includes('compression')
+  );
+}
+
 /**
  * Verify cleaned file by rescanning output
  */
@@ -269,30 +287,36 @@ export async function verifyCleanFile(cleanedBlob, originalInput = 0) {
 
   const totalOriginal = Math.max(0, Number(rawOriginal) || 0);
   const removedCount = totalOriginal > 0 ? Math.max(0, totalOriginal - remainingCount) : 0;
-  const isFullyClean = remainingCount === 0 && !locationRemaining;
   
   const remainingItemList = [];
   const categories = rescanResult.categories || {};
   Object.keys(categories).forEach(catKey => {
-    const isPrivacy = ['location', 'camera', 'datetime', 'author', 'software'].includes(catKey);
+    const isPrivacyCat = ['location', 'camera', 'datetime', 'author', 'software'].includes(catKey);
     const catLabel = catKey === 'location' ? 'Location Data' : 
                      catKey === 'camera' ? 'Camera & Device' :
                      catKey === 'datetime' ? 'Date & Time' :
                      catKey === 'author' ? 'Author / Copyright' :
-                     catKey === 'software' ? 'Software' : 'Technical';
+                     catKey === 'software' ? 'Software' : 'Technical File Property';
     (categories[catKey] || []).forEach(tag => {
+      const isEssential = isEssentialFileProperty(tag.name);
       remainingItemList.push({
         name: tag.name,
         value: tag.value,
         category: catLabel,
-        isPrivacy
+        isPrivacy: isPrivacyCat && !isEssential,
+        isEssentialProperty: isEssential
       });
     });
   });
 
+  const privacyRemainingCount = remainingItemList.filter(item => item.isPrivacy).length;
+  const isFullyClean = privacyRemainingCount === 0 && !locationRemaining;
+
   return {
     verified: isFullyClean,
     hasRemaining: remainingCount > 0,
+    hasPrivacyRemaining: privacyRemainingCount > 0,
+    privacyRemainingCount,
     remainingCount,
     removedCount,
     totalOriginal,

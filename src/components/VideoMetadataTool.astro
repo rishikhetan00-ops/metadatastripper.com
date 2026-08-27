@@ -554,13 +554,17 @@
       remainingItems: Array.isArray(rawReport?.remainingItems) ? rawReport.remainingItems : []
     };
 
+    const privacyItems = report.remainingItems.filter(item => item.isPrivacy);
+    const filePropertyItems = report.remainingItems.filter(item => !item.isPrivacy);
+
     const isZeroMetadata = report.totalOriginal === 0;
-    const isAllClean = !isZeroMetadata && (report.verified || report.remainingCount === 0);
-    const isPartial = !isZeroMetadata && report.remainingCount > 0;
+    const isPrivacyClean = privacyItems.length === 0;
+    const isAllClean = !isZeroMetadata && (report.verified || isPrivacyClean);
+    const isPartial = !isZeroMetadata && privacyItems.length > 0;
 
     let bannerTitle = 'Video Metadata Removed & Verified';
-    let bannerDesc = 'All supported removable metadata was stripped.';
-    let pillText = `${report.totalOriginal} / ${report.totalOriginal} fields removed`;
+    let bannerDesc = 'All privacy-sensitive video metadata has been stripped.';
+    let pillText = `${report.removedCount} / ${report.totalOriginal} fields removed`;
 
     if (isZeroMetadata) {
       bannerTitle = 'No Removable Metadata Detected';
@@ -568,7 +572,7 @@
       pillText = 'No Removable Metadata';
     } else if (isPartial) {
       bannerTitle = 'Partial Metadata Removed';
-      bannerDesc = `${report.remainingCount} metadata field(s) remain in the output file.`;
+      bannerDesc = `${privacyItems.length} privacy-sensitive metadata field(s) remain in the output file.`;
       pillText = `${report.removedCount} / ${report.totalOriginal} fields removed`;
     }
 
@@ -624,8 +628,8 @@
             <span class="text-[#4d4d4d] dark:text-[#a1a1a1] block font-semibold truncate">${escapeHtml(item.name)}</span>
             <span class="text-[10px] text-[#888888] font-mono">${escapeHtml(item.category || 'Metadata')}</span>
           </div>
-          <span class="${item.removed ? 'text-[#10b981]' : 'text-[#ee0000]'} font-semibold flex items-center gap-1 shrink-0">
-            ${item.removed ? '✓ Removed' : '⚠️ Remaining'}
+          <span class="${item.removed || !item.isPrivacy ? 'text-[#10b981]' : 'text-[#ee0000]'} font-semibold flex items-center gap-1 shrink-0">
+            ${item.removed ? '✓ Removed' : (!item.isPrivacy ? '✓ Preserved' : '⚠️ Remaining')}
           </span>
         `;
         listGrid.appendChild(itemDiv);
@@ -636,8 +640,8 @@
     videoStateVerify.appendChild(banner);
     videoStateVerify.appendChild(auditContainer);
 
-    // Remaining Metadata Details Breakdown (only rendered if partial removal)
-    if (isPartial && report.remainingItems.length > 0) {
+    // Render File Properties Preserved or Privacy Metadata Remaining
+    if (report.remainingItems.length > 0) {
       const remainingSection = renderRemainingMetadataSection(report.remainingItems);
       if (remainingSection) videoStateVerify.appendChild(remainingSection);
     }
@@ -667,37 +671,28 @@
     if (!remainingItems || remainingItems.length === 0) return null;
 
     const privacyItems = remainingItems.filter(item => item.isPrivacy);
-    const technicalItems = remainingItems.filter(item => !item.isPrivacy);
+    const filePropertyItems = remainingItems.filter(item => !item.isPrivacy);
 
     const section = document.createElement('div');
     section.className = 'border border-[#ebebeb] dark:border-[#262626] rounded-xl p-5 bg-[#fafafa] dark:bg-[#171717] space-y-4 max-w-full';
 
-    const sectionHeader = document.createElement('div');
-    sectionHeader.className = 'flex items-center justify-between gap-2';
-    sectionHeader.innerHTML = `
-      <h4 class="text-xs font-mono uppercase tracking-wider text-[#171717] dark:text-white font-bold flex items-center gap-2 truncate">
-        <span>⚠️</span> Remaining Metadata Details
-      </h4>
-      <span class="px-2.5 py-0.5 rounded-full bg-[#ffefcf] dark:bg-[#2e1e05] text-[#ab570a] dark:text-[#fbbf24] border border-[#f5a623] text-xs font-mono font-semibold shrink-0">
-        ${remainingItems.length} field(s) remain
-      </span>
-    `;
-    section.appendChild(sectionHeader);
-
-    // 1. Privacy-Sensitive Metadata Remaining
+    // 1. Privacy-Sensitive Metadata Remaining Section
     if (privacyItems.length > 0) {
       const privDiv = document.createElement('div');
       privDiv.className = 'p-4 rounded-xl bg-white dark:bg-[#111111] border border-[#ee0000]/40 space-y-2.5';
       privDiv.innerHTML = `
         <h5 class="text-xs font-mono font-bold text-[#ee0000] dark:text-[#f87171] uppercase tracking-wide flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-[#ee0000]"></span>
-          Privacy-sensitive metadata remaining (${privacyItems.length}):
+          Privacy Metadata Remaining (${privacyItems.length})
         </h5>
+        <p class="text-[11px] font-sans text-[#ee0000]/90 dark:text-[#f87171]/90">
+          The following privacy-sensitive fields could not be automatically stripped from the video container:
+        </p>
         <ul class="space-y-2 text-xs font-mono text-[#171717] dark:text-white divide-y divide-[#ebebeb] dark:divide-[#262626]">
           ${privacyItems.map(item => `
             <li class="pt-2 first:pt-0 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
               <span class="font-semibold text-[#171717] dark:text-white">• ${escapeHtml(item.name)}</span>
-              ${item.value ? `<span class="text-[#888888] dark:text-[#a1a1a1] break-all max-w-xs sm:max-w-md">${escapeHtml(item.value)}</span>` : ''}
+              ${item.value ? `<span class="text-[#ee0000] dark:text-[#f87171] font-mono break-all max-w-xs sm:max-w-md">${escapeHtml(item.value)}</span>` : ''}
             </li>
           `).join('')}
         </ul>
@@ -705,23 +700,26 @@
       section.appendChild(privDiv);
     }
 
-    // 2. Technical Metadata Remaining
-    if (technicalItems.length > 0) {
+    // 2. Technical File Properties Preserved Section
+    if (filePropertyItems.length > 0) {
       const techDiv = document.createElement('div');
-      techDiv.className = 'p-4 rounded-xl bg-white dark:bg-[#111111] border border-[#0070f3]/40 space-y-2.5';
+      techDiv.className = 'p-4 rounded-xl bg-white dark:bg-[#111111] border border-[#ebebeb] dark:border-[#262626] space-y-2.5';
       techDiv.innerHTML = `
-        <h5 class="text-xs font-mono font-bold text-[#0070f3] dark:text-[#38bdf8] uppercase tracking-wide flex items-center gap-2">
+        <h5 class="text-xs font-mono font-bold text-[#171717] dark:text-white uppercase tracking-wide flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-[#0070f3]"></span>
-          Technical metadata remaining (${technicalItems.length}):
+          FILE PROPERTIES PRESERVED (${filePropertyItems.length})
         </h5>
-        <ul class="space-y-2 text-xs font-mono text-[#171717] dark:text-white divide-y divide-[#ebebeb] dark:divide-[#262626]">
-          ${technicalItems.map(item => `
-            <li class="pt-2 first:pt-0 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-              <span class="font-semibold text-[#171717] dark:text-white">• ${escapeHtml(item.name)}</span>
-              ${item.value ? `<span class="text-[#888888] dark:text-[#a1a1a1] break-all max-w-xs sm:max-w-md">${escapeHtml(item.value)}</span>` : ''}
-            </li>
+        <p class="text-[11px] font-sans text-[#888888] dark:text-[#a1a1a1] leading-relaxed">
+          These are required technical properties of the file and do not contain personal or identifying information.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 font-mono text-xs">
+          ${filePropertyItems.map(item => `
+            <div class="p-2.5 rounded-lg bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] flex items-center justify-between gap-2">
+              <span class="font-semibold text-[#4d4d4d] dark:text-[#a1a1a1]">${escapeHtml(item.name)}</span>
+              <span class="text-[#171717] dark:text-white font-medium shrink-0">→ ${escapeHtml(item.value || 'Preserved')}</span>
+            </div>
           `).join('')}
-        </ul>
+        </div>
       `;
       section.appendChild(techDiv);
     }

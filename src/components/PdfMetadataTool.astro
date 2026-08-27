@@ -385,13 +385,16 @@
 
   // Dynamically render PDF Verify State HTML
   function renderPdfVerifyState(rawReport, durationSeconds, cleanUrl, cleanFileName) {
+    pdfStateVerify.innerHTML = '';
+
     const report = {
       totalOriginal: Math.max(0, Number(rawReport?.totalOriginal) || 0),
       removedCount: Math.max(0, Number(rawReport?.removedCount) || 0),
       remainingCount: Math.max(0, Number(rawReport?.remainingCount) || 0),
       hasRemaining: Boolean(rawReport?.hasRemaining),
       verified: Boolean(rawReport?.verified),
-      verificationItems: Array.isArray(rawReport?.verificationItems) ? rawReport.verificationItems : []
+      verificationItems: Array.isArray(rawReport?.verificationItems) ? rawReport.verificationItems : [],
+      remainingItems: Array.isArray(rawReport?.remainingItems) ? rawReport.remainingItems : []
     };
 
     const isZeroMetadata = report.totalOriginal === 0;
@@ -412,71 +415,152 @@
       pillText = `${report.removedCount} / ${report.totalOriginal} Fields Cleared`;
     }
 
-    pdfStateVerify.innerHTML = `
-      <div class="p-4 rounded-xl ${isZeroMetadata || isAllClean ? 'bg-[#d1fae5] dark:bg-[#064e3b] border border-[#10b981] text-[#065f46] dark:text-[#a7f3d0]' : 'bg-[#ffefcf] dark:bg-[#2e1e05] border border-[#f5a623] text-[#ab570a] dark:text-[#fbbf24]'} flex items-center justify-between gap-3 flex-col sm:flex-row">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-full ${isZeroMetadata || isAllClean ? 'bg-[#10b981]' : 'bg-[#f5a623]'} text-white flex items-center justify-center font-bold flex-shrink-0">
-            ${isZeroMetadata || isAllClean ? '✓' : '⚠️'}
-          </div>
-          <div>
-            <h4 class="text-sm font-semibold">${escapeHtml(bannerTitle)}</h4>
-            <p class="text-xs opacity-90 mt-0.5 font-mono">
-              ${escapeHtml(bannerDesc)}
-            </p>
-          </div>
+    const banner = document.createElement('div');
+    banner.className = `p-4 rounded-xl ${isZeroMetadata || isAllClean ? 'bg-[#d1fae5] dark:bg-[#064e3b] border border-[#10b981] text-[#065f46] dark:text-[#a7f3d0]' : 'bg-[#ffefcf] dark:bg-[#2e1e05] border border-[#f5a623] text-[#ab570a] dark:text-[#fbbf24]'} flex items-center justify-between gap-3 flex-col sm:flex-row`;
+    banner.innerHTML = `
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full ${isZeroMetadata || isAllClean ? 'bg-[#10b981]' : 'bg-[#f5a623]'} text-white flex items-center justify-center font-bold flex-shrink-0">
+          ${isZeroMetadata || isAllClean ? '✓' : '⚠️'}
         </div>
-        <div class="px-3 py-1.5 rounded-lg bg-white/70 dark:bg-black/40 border border-current/30 text-xs font-mono font-medium self-start sm:self-auto">
-          ⚡ Processing time: ${durationSeconds}s
+        <div>
+          <h4 class="text-sm font-semibold">${escapeHtml(bannerTitle)}</h4>
+          <p class="text-xs opacity-90 mt-0.5 font-mono">
+            ${escapeHtml(bannerDesc)}
+          </p>
         </div>
       </div>
-
-      <div class="border border-[#ebebeb] dark:border-[#262626] rounded-xl p-5 bg-[#fafafa] dark:bg-[#171717] space-y-4">
-        <div class="flex items-center justify-between">
-          <h4 class="text-xs font-mono uppercase tracking-wider text-[#888888] dark:text-[#a1a1a1]">PDF Verification Audit Report</h4>
-          <span class="px-2.5 py-1 rounded-full ${isZeroMetadata || isAllClean ? 'bg-[#10b981]' : 'bg-[#f5a623]'} text-white text-xs font-mono font-bold">
-            ${pillText}
-          </span>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
-          ${isZeroMetadata || report.verificationItems.length === 0 ? `
-            <div class="col-span-2 p-3 rounded-lg bg-white dark:bg-[#111111] border border-[#ebebeb] dark:border-[#262626] text-[#10b981] font-semibold flex items-center gap-2">
-              ✓ No standard removable metadata fields detected in this PDF document.
-            </div>
-          ` : report.verificationItems.map(item => `
-            <div class="flex items-center justify-between p-3 rounded-lg bg-white dark:bg-[#111111] border border-[#ebebeb] dark:border-[#262626]">
-              <div>
-                <span class="text-[#4d4d4d] dark:text-[#a1a1a1] block font-semibold">${escapeHtml(item.name)}</span>
-                <span class="text-[10px] text-[#888888] font-mono">${escapeHtml(item.key)}</span>
-              </div>
-              <span class="${item.removed ? 'text-[#10b981]' : 'text-[#ee0000]'} font-semibold flex items-center gap-1">
-                ${item.removed ? '✓ Cleared' : '⚠️ Remaining'}
-              </span>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-
-      <div class="pt-4 border-t border-[#ebebeb] dark:border-[#262626] flex flex-col sm:flex-row items-center justify-between gap-4">
-        <button 
-          id="btn-pdf-another"
-          class="w-full sm:w-auto px-6 py-3 rounded-full border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#171717] hover:bg-[#fafafa] dark:hover:bg-[#262626] text-[#171717] dark:text-white font-medium text-xs transition-colors"
-        >
-          Process Another PDF
-        </button>
-
-        <a 
-          href="${cleanUrl}" 
-          download="${cleanFileName}"
-          class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#0070f3] hover:bg-[#0761d1] text-white font-semibold text-sm shadow-md active:scale-98 transition-all flex items-center justify-center gap-2 text-center"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download Clean PDF
-        </a>
+      <div class="px-3 py-1.5 rounded-lg bg-white/70 dark:bg-black/40 border border-current/30 text-xs font-mono font-medium self-start sm:self-auto">
+        ⚡ Processing time: ${durationSeconds}s
       </div>
     `;
 
+    const auditContainer = document.createElement('div');
+    auditContainer.className = 'border border-[#ebebeb] dark:border-[#262626] rounded-xl p-5 bg-[#fafafa] dark:bg-[#171717] space-y-4';
+    auditContainer.innerHTML = `
+      <div class="flex items-center justify-between">
+        <h4 class="text-xs font-mono uppercase tracking-wider text-[#888888] dark:text-[#a1a1a1]">PDF Verification Audit Report</h4>
+        <span class="px-2.5 py-1 rounded-full ${isZeroMetadata || isAllClean ? 'bg-[#10b981]' : 'bg-[#f5a623]'} text-white text-xs font-mono font-bold">
+          ${pillText}
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+        ${isZeroMetadata || report.verificationItems.length === 0 ? `
+          <div class="col-span-2 p-3 rounded-lg bg-white dark:bg-[#111111] border border-[#ebebeb] dark:border-[#262626] text-[#10b981] font-semibold flex items-center gap-2">
+            ✓ No standard removable metadata fields detected in this PDF document.
+          </div>
+        ` : report.verificationItems.map(item => `
+          <div class="flex items-center justify-between p-3 rounded-lg bg-white dark:bg-[#111111] border border-[#ebebeb] dark:border-[#262626]">
+            <div>
+              <span class="text-[#4d4d4d] dark:text-[#a1a1a1] block font-semibold">${escapeHtml(item.name)}</span>
+              <span class="text-[10px] text-[#888888] font-mono">${escapeHtml(item.key)}</span>
+            </div>
+            <span class="${item.removed ? 'text-[#10b981]' : 'text-[#ee0000]'} font-semibold flex items-center gap-1">
+              ${item.removed ? '✓ Cleared' : '⚠️ Remaining'}
+            </span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    pdfStateVerify.appendChild(banner);
+    pdfStateVerify.appendChild(auditContainer);
+
+    // Remaining Metadata Details Breakdown (only rendered if partial removal)
+    if (isPartial && report.remainingItems.length > 0) {
+      const remainingSection = renderRemainingMetadataSection(report.remainingItems);
+      if (remainingSection) pdfStateVerify.appendChild(remainingSection);
+    }
+
+    const actionRow = document.createElement('div');
+    actionRow.className = 'pt-4 border-t border-[#ebebeb] dark:border-[#262626] flex flex-col sm:flex-row items-center justify-between gap-4';
+    actionRow.innerHTML = `
+      <button 
+        id="btn-pdf-another"
+        class="w-full sm:w-auto px-6 py-3 rounded-full border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#171717] hover:bg-[#fafafa] dark:hover:bg-[#262626] text-[#171717] dark:text-white font-medium text-xs transition-colors"
+      >
+        Process Another PDF
+      </button>
+
+      <a 
+        href="${cleanUrl}" 
+        download="${cleanFileName}"
+        class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#0070f3] hover:bg-[#0761d1] text-white font-semibold text-sm shadow-md active:scale-98 transition-all flex items-center justify-center gap-2 text-center"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Clean PDF
+      </a>
+    `;
+
+    pdfStateVerify.appendChild(actionRow);
     document.getElementById('btn-pdf-another')?.addEventListener('click', resetPdfToUploadState);
+  }
+
+  // Render Remaining Metadata Details Section
+  function renderRemainingMetadataSection(remainingItems) {
+    if (!remainingItems || remainingItems.length === 0) return null;
+
+    const privacyItems = remainingItems.filter(item => item.isPrivacy);
+    const technicalItems = remainingItems.filter(item => !item.isPrivacy);
+
+    const section = document.createElement('div');
+    section.className = 'border border-[#ebebeb] dark:border-[#262626] rounded-xl p-5 bg-[#fafafa] dark:bg-[#171717] space-y-4 max-w-full';
+
+    const sectionHeader = document.createElement('div');
+    sectionHeader.className = 'flex items-center justify-between gap-2';
+    sectionHeader.innerHTML = `
+      <h4 class="text-xs font-mono uppercase tracking-wider text-[#171717] dark:text-white font-bold flex items-center gap-2 truncate">
+        <span>⚠️</span> Remaining Metadata Details
+      </h4>
+      <span class="px-2.5 py-0.5 rounded-full bg-[#ffefcf] dark:bg-[#2e1e05] text-[#ab570a] dark:text-[#fbbf24] border border-[#f5a623] text-xs font-mono font-semibold shrink-0">
+        ${remainingItems.length} field(s) remain
+      </span>
+    `;
+    section.appendChild(sectionHeader);
+
+    // 1. Privacy-Sensitive Metadata Remaining
+    if (privacyItems.length > 0) {
+      const privDiv = document.createElement('div');
+      privDiv.className = 'p-4 rounded-xl bg-white dark:bg-[#111111] border border-[#ee0000]/40 space-y-2.5';
+      privDiv.innerHTML = `
+        <h5 class="text-xs font-mono font-bold text-[#ee0000] dark:text-[#f87171] uppercase tracking-wide flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#ee0000]"></span>
+          Privacy-sensitive metadata remaining (${privacyItems.length}):
+        </h5>
+        <ul class="space-y-2 text-xs font-mono text-[#171717] dark:text-white divide-y divide-[#ebebeb] dark:divide-[#262626]">
+          ${privacyItems.map(item => `
+            <li class="pt-2 first:pt-0 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+              <span class="font-semibold text-[#171717] dark:text-white">• ${escapeHtml(item.name)}</span>
+              ${item.value ? `<span class="text-[#888888] dark:text-[#a1a1a1] break-all max-w-xs sm:max-w-md">${escapeHtml(item.value)}</span>` : ''}
+            </li>
+          `).join('')}
+        </ul>
+      `;
+      section.appendChild(privDiv);
+    }
+
+    // 2. Technical Metadata Remaining
+    if (technicalItems.length > 0) {
+      const techDiv = document.createElement('div');
+      techDiv.className = 'p-4 rounded-xl bg-white dark:bg-[#111111] border border-[#0070f3]/40 space-y-2.5';
+      techDiv.innerHTML = `
+        <h5 class="text-xs font-mono font-bold text-[#0070f3] dark:text-[#38bdf8] uppercase tracking-wide flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#0070f3]"></span>
+          Technical metadata remaining (${technicalItems.length}):
+        </h5>
+        <ul class="space-y-2 text-xs font-mono text-[#171717] dark:text-white divide-y divide-[#ebebeb] dark:divide-[#262626]">
+          ${technicalItems.map(item => `
+            <li class="pt-2 first:pt-0 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+              <span class="font-semibold text-[#171717] dark:text-white">• ${escapeHtml(item.name)}</span>
+              ${item.value ? `<span class="text-[#888888] dark:text-[#a1a1a1] break-all max-w-xs sm:max-w-md">${escapeHtml(item.value)}</span>` : ''}
+            </li>
+          `).join('')}
+        </ul>
+      `;
+      section.appendChild(techDiv);
+    }
+
+    return section;
   }
 
   // Reset UI

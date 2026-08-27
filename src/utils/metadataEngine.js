@@ -271,6 +271,25 @@ export async function verifyCleanFile(cleanedBlob, originalInput = 0) {
   const removedCount = totalOriginal > 0 ? Math.max(0, totalOriginal - remainingCount) : 0;
   const isFullyClean = remainingCount === 0 && !locationRemaining;
   
+  const remainingItemList = [];
+  const categories = rescanResult.categories || {};
+  Object.keys(categories).forEach(catKey => {
+    const isPrivacy = ['location', 'camera', 'datetime', 'author', 'software'].includes(catKey);
+    const catLabel = catKey === 'location' ? 'Location Data' : 
+                     catKey === 'camera' ? 'Camera & Device' :
+                     catKey === 'datetime' ? 'Date & Time' :
+                     catKey === 'author' ? 'Author / Copyright' :
+                     catKey === 'software' ? 'Software' : 'Technical';
+    (categories[catKey] || []).forEach(tag => {
+      remainingItemList.push({
+        name: tag.name,
+        value: tag.value,
+        category: catLabel,
+        isPrivacy
+      });
+    });
+  });
+
   return {
     verified: isFullyClean,
     hasRemaining: remainingCount > 0,
@@ -279,6 +298,7 @@ export async function verifyCleanFile(cleanedBlob, originalInput = 0) {
     totalOriginal,
     hasLocation: locationRemaining,
     remainingCategories: rescanResult.categories || categorizeTags({}),
-    rescanCategories: rescanResult.categories || categorizeTags({})
+    rescanCategories: rescanResult.categories || categorizeTags({}),
+    remainingItems: remainingItemList
   };
 }

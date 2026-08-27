@@ -202,6 +202,8 @@ export async function verifyCleanPdf(cleanedBlob, originalInput = []) {
       return {
         name: item.name || item.key || 'PDF Field',
         key: item.key || '',
+        value: foundRescanItem ? foundRescanItem.value : (item.value || ''),
+        isPrivacy: true,
         removed
       };
     });
@@ -217,6 +219,7 @@ export async function verifyCleanPdf(cleanedBlob, originalInput = []) {
       remainingCount: remainingItems.length,
       totalOriginal,
       verificationItems,
+      remainingItems,
       remainingMetadataList: rescanList
     };
   } catch (err) {

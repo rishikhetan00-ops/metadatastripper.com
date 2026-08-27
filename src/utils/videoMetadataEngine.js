@@ -627,7 +627,7 @@ export async function verifyCleanVideo(cleanedBlob, originalInput = []) {
         category: item.category || 'Metadata',
         name: item.name || item.key || 'Metadata Tag',
         key: item.key || '',
-        value: item.value || '',
+        value: foundInRescan ? (foundInRescan.value || item.value) : item.value || '',
         isPrivacy: Boolean(item.isPrivacy),
         removed: !foundInRescan
       };

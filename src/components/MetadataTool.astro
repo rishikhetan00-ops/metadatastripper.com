@@ -497,7 +497,8 @@
       remainingCount: Math.max(0, Number(rawReport?.remainingCount) || 0),
       hasRemaining: Boolean(rawReport?.hasRemaining),
       verified: Boolean(rawReport?.verified),
-      remainingCategories: rawReport?.remainingCategories || {}
+      remainingCategories: rawReport?.remainingCategories || {},
+      remainingItems: Array.isArray(rawReport?.remainingItems) ? rawReport.remainingItems : []
     };
 
     const isZeroMetadata = report.totalOriginal === 0;
@@ -505,7 +506,7 @@
     const isPartial = !isZeroMetadata && report.remainingCount > 0;
 
     let bannerTitle = 'Metadata Removed & Verified';
-    let bannerDesc = '100% of EXIF, GPS, and sensitive tags have been stripped.';
+    let bannerDesc = 'All detected removable metadata was removed.';
     let pillText = `${report.totalOriginal} / ${report.totalOriginal} Tags Removed`;
 
     if (isZeroMetadata) {
@@ -584,6 +585,15 @@
 
     auditContainer.appendChild(listGrid);
 
+    stateVerify.appendChild(banner);
+    stateVerify.appendChild(auditContainer);
+
+    // Remaining Metadata Details Breakdown (only rendered if partial removal)
+    if (isPartial && report.remainingItems.length > 0) {
+      const remainingSection = renderRemainingMetadataSection(report.remainingItems);
+      if (remainingSection) stateVerify.appendChild(remainingSection);
+    }
+
     const actionRow = document.createElement('div');
     actionRow.className = 'pt-4 border-t border-[#ebebeb] dark:border-[#262626] flex flex-col sm:flex-row items-center justify-between gap-4';
 
@@ -601,9 +611,74 @@
     actionRow.appendChild(anotherBtn);
     actionRow.appendChild(downloadLink);
 
-    stateVerify.appendChild(banner);
-    stateVerify.appendChild(auditContainer);
     stateVerify.appendChild(actionRow);
+  }
+
+  // Render Remaining Metadata Details Section
+  function renderRemainingMetadataSection(remainingItems) {
+    if (!remainingItems || remainingItems.length === 0) return null;
+
+    const privacyItems = remainingItems.filter(item => item.isPrivacy);
+    const technicalItems = remainingItems.filter(item => !item.isPrivacy);
+
+    const section = document.createElement('div');
+    section.className = 'border border-[#ebebeb] dark:border-[#262626] rounded-xl p-5 bg-[#fafafa] dark:bg-[#171717] space-y-4';
+
+    const sectionHeader = document.createElement('div');
+    sectionHeader.className = 'flex items-center justify-between';
+    sectionHeader.innerHTML = `
+      <h4 class="text-xs font-mono uppercase tracking-wider text-[#171717] dark:text-white font-bold flex items-center gap-2">
+        <span>⚠️</span> Remaining Metadata Details
+      </h4>
+      <span class="px-2.5 py-0.5 rounded-full bg-[#ffefcf] dark:bg-[#2e1e05] text-[#ab570a] dark:text-[#fbbf24] border border-[#f5a623] text-xs font-mono font-semibold">
+        ${remainingItems.length} tag(s) remain
+      </span>
+    `;
+    section.appendChild(sectionHeader);
+
+    // 1. Privacy-Sensitive Metadata Remaining
+    if (privacyItems.length > 0) {
+      const privDiv = document.createElement('div');
+      privDiv.className = 'p-4 rounded-xl bg-white dark:bg-[#111111] border border-[#ee0000]/40 space-y-2.5';
+      privDiv.innerHTML = `
+        <h5 class="text-xs font-mono font-bold text-[#ee0000] dark:text-[#f87171] uppercase tracking-wide flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#ee0000]"></span>
+          Privacy-sensitive metadata remaining (${privacyItems.length}):
+        </h5>
+        <ul class="space-y-2 text-xs font-mono text-[#171717] dark:text-white divide-y divide-[#ebebeb] dark:divide-[#262626]">
+          ${privacyItems.map(item => `
+            <li class="pt-2 first:pt-0 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+              <span class="font-semibold text-[#171717] dark:text-white">• ${escapeHtml(item.name)}</span>
+              ${item.value ? `<span class="text-[#888888] dark:text-[#a1a1a1] break-all max-w-xs sm:max-w-md">${escapeHtml(item.value)}</span>` : ''}
+            </li>
+          `).join('')}
+        </ul>
+      `;
+      section.appendChild(privDiv);
+    }
+
+    // 2. Technical Metadata Remaining
+    if (technicalItems.length > 0) {
+      const techDiv = document.createElement('div');
+      techDiv.className = 'p-4 rounded-xl bg-white dark:bg-[#111111] border border-[#0070f3]/40 space-y-2.5';
+      techDiv.innerHTML = `
+        <h5 class="text-xs font-mono font-bold text-[#0070f3] dark:text-[#38bdf8] uppercase tracking-wide flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#0070f3]"></span>
+          Technical metadata remaining (${technicalItems.length}):
+        </h5>
+        <ul class="space-y-2 text-xs font-mono text-[#171717] dark:text-white divide-y divide-[#ebebeb] dark:divide-[#262626]">
+          ${technicalItems.map(item => `
+            <li class="pt-2 first:pt-0 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+              <span class="font-semibold text-[#171717] dark:text-white">• ${escapeHtml(item.name)}</span>
+              ${item.value ? `<span class="text-[#888888] dark:text-[#a1a1a1] break-all max-w-xs sm:max-w-md">${escapeHtml(item.value)}</span>` : ''}
+            </li>
+          `).join('')}
+        </ul>
+      `;
+      section.appendChild(techDiv);
+    }
+
+    return section;
   }
 
   // Reset UI

@@ -43,6 +43,36 @@
   }
 }
 
+/* Metadata Stripper Brand Logo Adaptability */
+.logo-primary-stroke {
+  stroke: #171717;
+  transition: stroke 0.2s ease;
+}
+.logo-primary-fill {
+  fill: #171717;
+  transition: fill 0.2s ease;
+}
+.logo-cutout-fill {
+  fill: #ffffff;
+  transition: fill 0.2s ease;
+}
+.logo-accent-stroke {
+  stroke: #1683ff;
+}
+.logo-accent-fill {
+  fill: #1683ff;
+}
+
+html.dark .logo-primary-stroke {
+  stroke: #ffffff;
+}
+html.dark .logo-primary-fill {
+  fill: #ffffff;
+}
+html.dark .logo-cutout-fill {
+  fill: #0a0a0a;
+}
+
 /* Vercel Mesh Gradient Hero Background */
 .mesh-gradient-bg {
   background-image: 

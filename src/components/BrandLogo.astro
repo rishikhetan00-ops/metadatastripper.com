@@ -1,19 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
-  <title id="title">Metadata Stripper</title>
-  <desc id="desc">Minimal shield, metadata tag and removal mark icon</desc>
-  <style>
-    .logo-primary-stroke { stroke: #171717; }
-    .logo-primary-fill { fill: #171717; }
-    .logo-cutout-fill { fill: #ffffff; }
-    .logo-accent-stroke { stroke: #1683ff; }
-    .logo-accent-fill { fill: #1683ff; }
+---
+interface Props {
+  class?: string;
+  size?: number | string;
+}
 
-    @media (prefers-color-scheme: dark) {
-      .logo-primary-stroke { stroke: #ffffff; }
-      .logo-primary-fill { fill: #ffffff; }
-      .logo-cutout-fill { fill: #0a0a0a; }
-    }
-  </style>
+const { class: className = "w-9 h-9", size } = Astro.props;
+---
+
+<svg 
+  xmlns="http://www.w3.org/2000/svg" 
+  viewBox="0 0 512 512" 
+  role="img" 
+  aria-label="Metadata Stripper logo"
+  class={className}
+  width={size}
+  height={size}
+>
+  <title>Metadata Stripper</title>
+  <desc>Minimal shield, metadata tag and removal mark icon</desc>
   <path d="M256 78L388 130V238c0 92-53 160-132 200-79-40-132-108-132-200V130z" fill="none" class="logo-primary-stroke" stroke-width="24" stroke-linejoin="round"/>
   <path d="M183 171h95l48 48v79l-87 87-82-82V197c0-14 12-26 26-26z" class="logo-primary-fill"/>
   <circle cx="193" cy="207" r="12" class="logo-cutout-fill"/>

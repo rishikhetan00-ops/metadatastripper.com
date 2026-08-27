@@ -52,37 +52,43 @@
     </p>
 
     <div class="border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-hidden bg-white dark:bg-[#111111]">
-      <table class="w-full text-left text-xs font-mono">
-        <thead class="bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[#888888] dark:text-[#a1a1a1]">
-          <tr>
-            <th class="px-4 py-3 font-medium">MP4 Box Atom</th>
-            <th class="px-4 py-3 font-medium">Stored Information</th>
-            <th class="px-4 py-3 font-medium">Privacy Impact</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-[#ebebeb] dark:divide-[#262626] text-[#171717] dark:text-white">
-          <tr>
-            <td class="px-4 py-2.5 font-semibold">`moov.udta.location`</td>
-            <td class="px-4 py-2.5">GPS Location Coordinates</td>
-            <td class="px-4 py-2.5 text-[#ee0000]">High Privacy Risk</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-2.5 font-semibold">`mvhd.creation_time`</td>
-            <td class="px-4 py-2.5">File Creation &amp; Export Date</td>
-            <td class="px-4 py-2.5 text-[#f5a623]">Medium Risk</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-2.5 font-semibold">`com.apple.quicktime.make`</td>
-            <td class="px-4 py-2.5">Camera Manufacturer (Apple, Samsung)</td>
-            <td class="px-4 py-2.5 text-[#f5a623]">Medium Risk</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-2.5 font-semibold">`handler_name` / `encoder`</td>
-            <td class="px-4 py-2.5">Editing Application Name</td>
-            <td class="px-4 py-2.5 text-[#888888]">Low Risk</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="flex items-center justify-between px-4 py-2 bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[11px] font-mono text-[#888888] dark:text-[#a1a1a1] sm:hidden">
+        <span>Scroll table to view all columns</span>
+        <span>→</span>
+      </div>
+      <div class="overflow-x-auto [webkit-overflow-scrolling:touch] w-full">
+        <table class="w-full text-left text-xs font-mono min-w-[500px]">
+          <thead class="bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[#888888] dark:text-[#a1a1a1]">
+            <tr>
+              <th class="px-4 py-3 font-medium">MP4 Box Atom</th>
+              <th class="px-4 py-3 font-medium">Stored Information</th>
+              <th class="px-4 py-3 font-medium">Privacy Impact</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#ebebeb] dark:divide-[#262626] text-[#171717] dark:text-white">
+            <tr>
+              <td class="px-4 py-2.5 font-semibold">`moov.udta.location`</td>
+              <td class="px-4 py-2.5">GPS Location Coordinates</td>
+              <td class="px-4 py-2.5 text-[#ee0000]">High Privacy Risk</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-semibold">`mvhd.creation_time`</td>
+              <td class="px-4 py-2.5">File Creation &amp; Export Date</td>
+              <td class="px-4 py-2.5 text-[#f5a623]">Medium Risk</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-semibold">`com.apple.quicktime.make`</td>
+              <td class="px-4 py-2.5">Camera Manufacturer (Apple, Samsung)</td>
+              <td class="px-4 py-2.5 text-[#f5a623]">Medium Risk</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-semibold">`handler_name` / `encoder`</td>
+              <td class="px-4 py-2.5">Editing Application Name</td>
+              <td class="px-4 py-2.5 text-[#888888]">Low Risk</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 

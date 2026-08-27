@@ -354,10 +354,18 @@
         privacyHeader.appendChild(noPrivacyBanner);
       } else {
         const pTableBox = document.createElement('div');
-        pTableBox.className = 'border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-x-auto bg-white dark:bg-[#111111] max-w-full';
+        pTableBox.className = 'border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-hidden bg-white dark:bg-[#111111]';
+
+        const pSwipeHint = document.createElement('div');
+        pSwipeHint.className = 'flex items-center justify-between px-3 py-2 bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[11px] font-mono text-[#888888] dark:text-[#a1a1a1] sm:hidden';
+        pSwipeHint.innerHTML = `<span>Scroll table to view all columns</span> <span>→</span>`;
+        pTableBox.appendChild(pSwipeHint);
+
+        const pScrollWrapper = document.createElement('div');
+        pScrollWrapper.className = 'overflow-x-auto [webkit-overflow-scrolling:touch] w-full';
 
         const pTable = document.createElement('table');
-        pTable.className = 'w-full text-left text-xs font-mono min-w-full';
+        pTable.className = 'w-full min-w-[540px] text-left text-xs font-mono';
         pTable.innerHTML = `
           <thead class="bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[#888888] dark:text-[#a1a1a1]">
             <tr>
@@ -370,15 +378,16 @@
           <tbody class="divide-y divide-[#ebebeb] dark:divide-[#262626] text-[#171717] dark:text-white">
             ${privacyItems.map(item => `
               <tr class="hover:bg-[#fafafa] dark:hover:bg-[#171717] transition-colors">
-                <td class="px-3 py-2.5 text-[#4d4d4d] dark:text-[#a1a1a1] font-semibold break-words">${escapeHtml(item.name)}</td>
+                <td class="px-3 py-2.5 text-[#4d4d4d] dark:text-[#a1a1a1] font-semibold break-words max-w-[150px] sm:max-w-none">${escapeHtml(item.name)}</td>
                 <td class="px-3 py-2.5 text-[#888888] hidden sm:table-cell">${escapeHtml(item.category || 'Privacy')}</td>
-                <td class="px-3 py-2.5 text-[#171717] dark:text-white break-all max-w-[150px] sm:max-w-none">${escapeHtml(item.value)}</td>
+                <td class="px-3 py-2.5 text-[#171717] dark:text-white break-all max-w-xs sm:max-w-md">${escapeHtml(item.value)}</td>
                 <td class="px-3 py-2.5 text-right font-medium text-[#10b981] whitespace-nowrap">Removable ✓</td>
               </tr>
             `).join('')}
           </tbody>
         `;
-        pTableBox.appendChild(pTable);
+        pScrollWrapper.appendChild(pTable);
+        pTableBox.appendChild(pScrollWrapper);
         privacyHeader.appendChild(pTableBox);
       }
       tableWrapper.appendChild(privacyHeader);
@@ -404,10 +413,18 @@
         techHeader.appendChild(tTitleRow);
 
         const tTableBox = document.createElement('div');
-        tTableBox.className = 'border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-x-auto bg-white dark:bg-[#111111] max-w-full';
+        tTableBox.className = 'border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-hidden bg-white dark:bg-[#111111]';
+
+        const tSwipeHint = document.createElement('div');
+        tSwipeHint.className = 'flex items-center justify-between px-3 py-2 bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[11px] font-mono text-[#888888] dark:text-[#a1a1a1] sm:hidden';
+        tSwipeHint.innerHTML = `<span>Scroll table to view all columns</span> <span>→</span>`;
+        tTableBox.appendChild(tSwipeHint);
+
+        const tScrollWrapper = document.createElement('div');
+        tScrollWrapper.className = 'overflow-x-auto [webkit-overflow-scrolling:touch] w-full';
 
         const tTable = document.createElement('table');
-        tTable.className = 'w-full text-left text-xs font-mono min-w-full';
+        tTable.className = 'w-full min-w-[500px] text-left text-xs font-mono';
         tTable.innerHTML = `
           <thead class="bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[#888888] dark:text-[#a1a1a1]">
             <tr>
@@ -419,14 +436,15 @@
           <tbody class="divide-y divide-[#ebebeb] dark:divide-[#262626] text-[#171717] dark:text-white">
             ${technicalItems.map(item => `
               <tr class="hover:bg-[#fafafa] dark:hover:bg-[#171717] transition-colors">
-                <td class="px-3 py-2.5 text-[#4d4d4d] dark:text-[#a1a1a1] font-semibold break-words">${escapeHtml(item.name)}</td>
-                <td class="px-3 py-2.5 text-[#171717] dark:text-white break-all max-w-[150px] sm:max-w-none">${escapeHtml(item.value)}</td>
+                <td class="px-3 py-2.5 text-[#4d4d4d] dark:text-[#a1a1a1] font-semibold break-words max-w-[150px] sm:max-w-none">${escapeHtml(item.name)}</td>
+                <td class="px-3 py-2.5 text-[#171717] dark:text-white break-all max-w-xs sm:max-w-md">${escapeHtml(item.value)}</td>
                 <td class="px-3 py-2.5 text-right font-medium text-[#10b981] whitespace-nowrap">Removable ✓</td>
               </tr>
             `).join('')}
           </tbody>
         `;
-        tTableBox.appendChild(tTable);
+        tScrollWrapper.appendChild(tTable);
+        tTableBox.appendChild(tScrollWrapper);
         techHeader.appendChild(tTableBox);
         tableWrapper.appendChild(techHeader);
       }

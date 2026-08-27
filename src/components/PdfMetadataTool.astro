@@ -286,19 +286,36 @@
           <div class="p-4 rounded-lg bg-white dark:bg-[#111111] border border-[#ebebeb] dark:border-[#262626] text-xs font-mono text-[#888888]">
             ✓ No standard removable metadata fields detected in this PDF document.
           </div>
-        ` : ''}
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
-          ${results.metadataList.map(item => `
-            <div class="flex items-center justify-between p-3 rounded-lg bg-white dark:bg-[#111111] border border-[#ebebeb] dark:border-[#262626]">
-              <div>
-                <span class="text-[#4d4d4d] dark:text-[#a1a1a1] block font-semibold">${escapeHtml(item.name)}</span>
-                <span class="text-[10px] text-[#888888] font-mono">${escapeHtml(item.key)}</span>
-              </div>
-              <span class="text-[#171717] dark:text-white font-semibold truncate max-w-[120px]">${escapeHtml(item.value)}</span>
+        ` : `
+          <div class="border border-[#ebebeb] dark:border-[#262626] rounded-xl bg-white dark:bg-[#111111] overflow-hidden">
+            <div class="flex items-center justify-between px-3 py-2 bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[11px] font-mono text-[#888888] dark:text-[#a1a1a1] sm:hidden">
+              <span>Scroll table to view all columns</span>
+              <span>→</span>
             </div>
-          `).join('')}
-        </div>
+            <div class="overflow-x-auto [webkit-overflow-scrolling:touch] w-full">
+              <table class="w-full min-w-[500px] text-left text-xs font-mono">
+                <thead class="bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[#888888] dark:text-[#a1a1a1]">
+                  <tr>
+                    <th class="px-3 py-2.5 font-medium">PDF Field</th>
+                    <th class="px-3 py-2.5 font-medium hidden sm:table-cell">Internal Key</th>
+                    <th class="px-3 py-2.5 font-medium">Detected Value</th>
+                    <th class="px-3 py-2.5 font-medium text-right">Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-[#ebebeb] dark:divide-[#262626] text-[#171717] dark:text-white">
+                  ${results.metadataList.map(item => `
+                    <tr class="hover:bg-[#fafafa] dark:hover:bg-[#171717] transition-colors">
+                      <td class="px-3 py-2.5 text-[#4d4d4d] dark:text-[#a1a1a1] font-semibold break-words max-w-[150px] sm:max-w-none">${escapeHtml(item.name)}</td>
+                      <td class="px-3 py-2.5 text-[#888888] text-[10px] hidden sm:table-cell font-mono">${escapeHtml(item.key)}</td>
+                      <td class="px-3 py-2.5 text-[#171717] dark:text-white break-all max-w-xs sm:max-w-md">${escapeHtml(item.value)}</td>
+                      <td class="px-3 py-2.5 text-right font-medium text-[#10b981] whitespace-nowrap">Removable ✓</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `}
       </div>
 
       <!-- Action Row -->

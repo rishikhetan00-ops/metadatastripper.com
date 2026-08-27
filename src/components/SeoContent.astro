@@ -142,43 +142,49 @@ import FaqSection from './FaqSection.astro';
       Our <strong>free online exif remover</strong> uses direct binary segment manipulation to guarantee <strong>real metadata remover</strong> performance:
     </p>
 
-    <div class="border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-x-auto bg-white dark:bg-[#111111] max-w-full">
-      <table class="w-full text-left text-xs font-mono min-w-full">
-        <thead class="bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[#888888] dark:text-[#a1a1a1]">
-          <tr>
-            <th class="px-4 py-3 font-medium">Metadata Field</th>
-            <th class="px-4 py-3 font-medium">Removal Action</th>
-            <th class="px-4 py-3 font-medium">Visual Quality Impact</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-[#ebebeb] dark:divide-[#262626] text-[#171717] dark:text-white">
-          <tr>
-            <td class="px-4 py-2.5 font-semibold">GPS Location Data</td>
-            <td class="px-4 py-2.5 text-[#10b981]">Purged Completely ✓</td>
-            <td class="px-4 py-2.5 text-[#888888] dark:text-[#a1a1a1]">Location coordinates stripped completely</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-2.5 font-semibold">Camera Make & Model</td>
-            <td class="px-4 py-2.5 text-[#10b981]">Purged Completely ✓</td>
-            <td class="px-4 py-2.5 text-[#888888] dark:text-[#a1a1a1]">Device model, lens, serial numbers erased</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-2.5 font-semibold">Capture Timestamps</td>
-            <td class="px-4 py-2.5 text-[#10b981]">Purged Completely ✓</td>
-            <td class="px-4 py-2.5 text-[#888888] dark:text-[#a1a1a1]">Date & time history wiped</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-2.5 font-semibold">Photo Orientation</td>
-            <td class="px-4 py-2.5 text-[#0070f3]">Preserved Intact ✓</td>
-            <td class="px-4 py-2.5 text-[#888888] dark:text-[#a1a1a1]">Photo orientation remains correct</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-2.5 font-semibold">Pixel Data & Resolution</td>
-            <td class="px-4 py-2.5 text-[#0070f3]">100% Unmodified ✓</td>
-            <td class="px-4 py-2.5 text-[#888888] dark:text-[#a1a1a1]">Zero pixel re-compression or quality loss</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-hidden bg-white dark:bg-[#111111]">
+      <div class="flex items-center justify-between px-4 py-2 bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[11px] font-mono text-[#888888] dark:text-[#a1a1a1] sm:hidden">
+        <span>Scroll table to view all columns</span>
+        <span>→</span>
+      </div>
+      <div class="overflow-x-auto [webkit-overflow-scrolling:touch] w-full">
+        <table class="w-full text-left text-xs font-mono min-w-[540px]">
+          <thead class="bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[#888888] dark:text-[#a1a1a1]">
+            <tr>
+              <th class="px-4 py-3 font-medium">Metadata Field</th>
+              <th class="px-4 py-3 font-medium">Removal Action</th>
+              <th class="px-4 py-3 font-medium">Visual Quality Impact</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#ebebeb] dark:divide-[#262626] text-[#171717] dark:text-white">
+            <tr>
+              <td class="px-4 py-2.5 font-semibold">GPS Location Data</td>
+              <td class="px-4 py-2.5 text-[#10b981]">Purged Completely ✓</td>
+              <td class="px-4 py-2.5 text-[#888888] dark:text-[#a1a1a1]">Location coordinates stripped completely</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-semibold">Camera Make & Model</td>
+              <td class="px-4 py-2.5 text-[#10b981]">Purged Completely ✓</td>
+              <td class="px-4 py-2.5 text-[#888888] dark:text-[#a1a1a1]">Device model, lens, serial numbers erased</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-semibold">Capture Timestamps</td>
+              <td class="px-4 py-2.5 text-[#10b981]">Purged Completely ✓</td>
+              <td class="px-4 py-2.5 text-[#888888] dark:text-[#a1a1a1]">Date & time history wiped</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-semibold">Photo Orientation</td>
+              <td class="px-4 py-2.5 text-[#0070f3]">Preserved Intact ✓</td>
+              <td class="px-4 py-2.5 text-[#888888] dark:text-[#a1a1a1]">Photo orientation remains correct</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-semibold">Pixel Data & Resolution</td>
+              <td class="px-4 py-2.5 text-[#0070f3]">100% Unmodified ✓</td>
+              <td class="px-4 py-2.5 text-[#888888] dark:text-[#a1a1a1]">Zero pixel re-compression or quality loss</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -188,38 +194,44 @@ import FaqSection from './FaqSection.astro';
       How Metadata Remover Compares to Other Tools
     </h2>
 
-    <div class="border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-x-auto bg-white dark:bg-[#111111] max-w-full">
-      <table class="w-full text-left text-xs font-mono min-w-full">
-        <thead class="bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[#888888] dark:text-[#a1a1a1]">
-          <tr>
-            <th class="px-4 py-3 font-medium">Feature / Spec</th>
-            <th class="px-4 py-3 font-medium text-[#0070f3]">Metadata Remover (Us)</th>
-            <th class="px-4 py-3 font-medium">Other Online EXIF Removers</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-[#ebebeb] dark:divide-[#262626] text-[#171717] dark:text-white">
-          <tr>
-            <td class="px-4 py-2.5 font-semibold">File Privacy</td>
-            <td class="px-4 py-2.5 text-[#10b981] font-bold">100% Client-side (No upload)</td>
-            <td class="px-4 py-2.5 text-[#ee0000]">Uploaded to cloud servers</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-2.5 font-semibold">Supported Formats</td>
-            <td class="px-4 py-2.5 text-[#10b981] font-bold">JPG, PNG, WebP, PDF, MP4, MOV</td>
-            <td class="px-4 py-2.5 text-[#888888]">Images only</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-2.5 font-semibold">Verification Audit</td>
-            <td class="px-4 py-2.5 text-[#10b981] font-bold">Automatic Rescan Audit Proof</td>
-            <td class="px-4 py-2.5 text-[#ee0000]">None (Unverified)</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-2.5 font-semibold">Pricing</td>
-            <td class="px-4 py-2.5 text-[#10b981] font-bold">100% Free Forever</td>
-            <td class="px-4 py-2.5 text-[#888888]">Freemium / Ads / Limits</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-hidden bg-white dark:bg-[#111111]">
+      <div class="flex items-center justify-between px-4 py-2 bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[11px] font-mono text-[#888888] dark:text-[#a1a1a1] sm:hidden">
+        <span>Scroll table to view all columns</span>
+        <span>→</span>
+      </div>
+      <div class="overflow-x-auto [webkit-overflow-scrolling:touch] w-full">
+        <table class="w-full text-left text-xs font-mono min-w-[540px]">
+          <thead class="bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[#888888] dark:text-[#a1a1a1]">
+            <tr>
+              <th class="px-4 py-3 font-medium">Feature / Spec</th>
+              <th class="px-4 py-3 font-medium text-[#0070f3]">Metadata Remover (Us)</th>
+              <th class="px-4 py-3 font-medium">Other Online EXIF Removers</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#ebebeb] dark:divide-[#262626] text-[#171717] dark:text-white">
+            <tr>
+              <td class="px-4 py-2.5 font-semibold">File Privacy</td>
+              <td class="px-4 py-2.5 text-[#10b981] font-bold">100% Client-side (No upload)</td>
+              <td class="px-4 py-2.5 text-[#ee0000]">Uploaded to cloud servers</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-semibold">Supported Formats</td>
+              <td class="px-4 py-2.5 text-[#10b981] font-bold">JPG, PNG, WebP, PDF, MP4, MOV</td>
+              <td class="px-4 py-2.5 text-[#888888]">Images only</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-semibold">Verification Audit</td>
+              <td class="px-4 py-2.5 text-[#10b981] font-bold">Automatic Rescan Audit Proof</td>
+              <td class="px-4 py-2.5 text-[#ee0000]">None (Unverified)</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-semibold">Pricing</td>
+              <td class="px-4 py-2.5 text-[#10b981] font-bold">100% Free Forever</td>
+              <td class="px-4 py-2.5 text-[#888888]">Freemium / Ads / Limits</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 

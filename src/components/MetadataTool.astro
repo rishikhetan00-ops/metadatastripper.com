@@ -369,8 +369,17 @@
     const tableContainer = document.createElement('div');
     tableContainer.className = 'border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-hidden bg-white dark:bg-[#111111]';
 
+    // Mobile swipe visual cue
+    const swipeHint = document.createElement('div');
+    swipeHint.className = 'flex items-center justify-between px-4 py-2 bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[11px] font-mono text-[#888888] dark:text-[#a1a1a1] sm:hidden';
+    swipeHint.innerHTML = `<span>Scroll table to view all columns</span> <span>→</span>`;
+    tableContainer.appendChild(swipeHint);
+
+    const scrollWrapper = document.createElement('div');
+    scrollWrapper.className = 'overflow-x-auto [webkit-overflow-scrolling:touch] w-full';
+
     const table = document.createElement('table');
-    table.className = 'w-full text-left text-xs font-mono';
+    table.className = 'w-full min-w-[540px] text-left text-xs font-mono';
     
     const thead = document.createElement('thead');
     thead.className = 'bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[#888888] dark:text-[#a1a1a1]';
@@ -402,16 +411,17 @@
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-[#fafafa] dark:hover:bg-[#171717] transition-colors';
         tr.innerHTML = `
-          <td class="px-4 py-3 text-[#4d4d4d] dark:text-[#a1a1a1] font-semibold">${escapeHtml(tag.name)}</td>
+          <td class="px-4 py-3 text-[#4d4d4d] dark:text-[#a1a1a1] font-semibold break-words max-w-[180px] sm:max-w-none">${escapeHtml(tag.name)}</td>
           <td class="px-4 py-3 text-[#171717] dark:text-white break-all max-w-xs sm:max-w-md">${escapeHtml(tag.value)}</td>
-          <td class="px-4 py-3 text-right font-medium text-[#10b981]">Will be stripped ✓</td>
+          <td class="px-4 py-3 text-right font-medium text-[#10b981] whitespace-nowrap">Will be stripped ✓</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
     table.appendChild(tbody);
-    tableContainer.appendChild(table);
+    scrollWrapper.appendChild(table);
+    tableContainer.appendChild(scrollWrapper);
     stateScan.appendChild(tableContainer);
 
     // Action Row

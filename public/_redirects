@@ -1,2 +1,0 @@
-# Redirect pages.dev domain to primary custom domain
-https://metadatastripper.pages.dev/* https://metadatastripper.com/:splat 301!
